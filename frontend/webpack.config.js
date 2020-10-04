@@ -1,14 +1,15 @@
-const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const ImageminPlugin = require('imagemin-webpack-plugin').default
 
 module.exports = {
-  mode: "none",
+  mode: 'none',
   entry: {
-    app: path.join(__dirname, "src", "index.tsx"),
+    app: path.join(__dirname, 'src', 'index.tsx'),
   },
-  target: "web",
+  target: 'web',
   resolve: {
-    extensions: [".ts", ".tsx", ".js"],
+    extensions: ['.ts', '.tsx', '.js'],
   },
   devServer: {
     stats: {
@@ -21,22 +22,39 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        use: ["ts-loader"],
-        exclude: "/node_modules/",
+        use: ['ts-loader'],
+        exclude: '/node_modules/',
       },
       {
         test: /\.css$/i,
-        use: ["style-loader", "css-loader"],
+        use: ['style-loader', 'css-loader'],
+      },
+      {
+        test: /\.(png|jpg|gif|svg)$/i,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: false,
+            },
+          },
+        ],
       },
     ],
   },
   output: {
-    filename: "[name].js",
-    path: path.resolve(__dirname, "dist"),
+    filename: '[name].js',
+    path: path.resolve(__dirname, 'dist'),
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, "src", "index.html"),
+      template: path.join(__dirname, 'src', 'index.html'),
+    }),
+    new ImageminPlugin({
+      disable: process.env.NODE_ENV !== 'production', // Disable during development
+      pngquant: {
+        quality: '95-100',
+      },
     }),
   ],
-};
+}
