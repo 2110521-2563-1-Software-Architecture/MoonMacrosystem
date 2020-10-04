@@ -1,6 +1,8 @@
 import React from 'react'
 import { Form, Input, Button, Checkbox, Layout } from 'antd'
+import logo from '../assets/img/logo.svg'
 
+//#region
 const layout = {
   labelCol: { span: 8 },
   wrapperCol: { span: 16 },
@@ -15,11 +17,11 @@ const divStyle = {
   paddingTop: '3em',
 }
 const formStyle = {
-  marginRight: '20%',
+  marginTop: '3em',
+  marginLeft: '20%',
+  marginRight: '30%',
 }
-const Test = () => {
-  return <h1>Hello</h1>
-}
+//#endregion
 
 const Login = () => {
   const onFinish = (values: unknown) => {
@@ -32,7 +34,9 @@ const Login = () => {
 
   return (
     <div style={divStyle}>
-      <Test />
+      <div style={{ textAlign: 'center' }}>
+        <img src={logo} alt="Tumrai" />
+      </div>
       <Form
         {...layout}
         name="login-form"
