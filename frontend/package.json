@@ -1,0 +1,65 @@
+{
+  "name": "mm-frontend",
+  "version": "1.0.0",
+  "description": "frontend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
+    "prebuild": "yarn",
+    "build": "webpack --config webpack.config.js",
+    "dev": "webpack-dev-server --mode development --hot"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/2110521-2563-1-Software-Architecture/MoonMacrosystem.git"
+  },
+  "author": "icekang, pornapats, pinnnp, zaltzea",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/2110521-2563-1-Software-Architecture/MoonMacrosystem/issues"
+  },
+  "homepage": "https://github.com/2110521-2563-1-Software-Architecture/MoonMacrosystem#readme",
+  "dependencies": {
+    "antd": "^4.6.6",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  },
+  "devDependencies": {
+    "@types/react": "^16.8.24",
+    "@types/react-dom": "^16.0.5",
+    "@types/webpack": "4.1.4",
+    "@typescript-eslint/eslint-plugin": "^4.3.0",
+    "@typescript-eslint/parser": "^4.3.0",
+    "css-loader": "^4.3.0",
+    "eslint": "^7.10.0",
+    "eslint-config-prettier": "^6.12.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.21.3",
+    "html-webpack-plugin": "^4.5.0",
+    "husky": "^4.3.0",
+    "lint-staged": "^10.4.0",
+    "prettier": "^2.1.2",
+    "style-loader": "^1.3.0",
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.4.3",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.11.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "eslint --fix --quiet --ignore-path .eslintignore",
+      "git add"
+    ],
+    "*.json": [
+      "prettier --write",
+      "git add"
+    ]
+  }
+}
