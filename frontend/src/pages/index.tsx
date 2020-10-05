@@ -1,13 +1,8 @@
 import React from 'react'
 import { Form, Input, Button, Checkbox, Layout } from 'antd'
-<<<<<<< HEAD
 import logo from '../assets/img/logo.svg'
 import { loginPayload } from '../services/intf'
 import signIn from '../services/api'
-||||||| merged common ancestors
-=======
-import logo from '../assets/img/logo.svg'
->>>>>>> 4c20d34dd51422b0614c16717fc023a2f990d8c0
 
 //#region
 const layout = {
