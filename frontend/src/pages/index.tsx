@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { CSSProperties } from 'react'
 import { Form, Input, Button, Checkbox, Layout } from 'antd'
 import logo from '../assets/img/logo.svg'
 import { loginPayload } from '../services/intf'
@@ -12,14 +12,14 @@ const layout = {
 const tailLayout = {
   wrapperCol: { offset: 8, span: 16 },
 }
-const divStyle = {
-  width: '100%',
-  minHeight: '100%',
-  background: 'white',
-  paddingTop: '3em',
+const divStyle: CSSProperties = {
+  boxSizing: 'border-box',
+  display: 'inline',
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'center',
 }
-const formStyle = {
-  marginTop: '3em',
+const formStyle: CSSProperties = {
   marginLeft: '20%',
   marginRight: '30%',
 }
@@ -28,7 +28,9 @@ const formStyle = {
 const Login = () => {
   const onFinish = (values: loginPayload) => {
     console.log('Success:', values)
-    console.log(signIn(values))
+    if (signIn(values)) {
+      alert('Login Success')
+    }
   }
 
   const onFinishFailed = (errorInfo: unknown) => {
@@ -37,7 +39,7 @@ const Login = () => {
 
   return (
     <div style={divStyle}>
-      <div style={{ textAlign: 'center' }}>
+      <div style={{ textAlign: 'center', padding: '3em' }}>
         <img src={logo} alt="Tumrai" />
       </div>
       <Form

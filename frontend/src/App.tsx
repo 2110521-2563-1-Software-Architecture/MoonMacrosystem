@@ -6,11 +6,11 @@ import CommentItem from './component/commentitem'
 
 export default function App() {
   return (
-    <div>
+    <div style={{ minHeight: '100vh' }}>
       <Login />
-      <PostItem name="ploy" content="hi" />
-      <CommentItem name="ploy" content="hi" />
-      <CommentItem name="ploy" content="hi" />
+      {/* <PostItem name="ploy" content="hi" /> */}
+      {/* <CommentItem name="ploy" content="hi" /> */}
+      {/* <CommentItem name="ploy" content="hi" /> */}
     </div>
   )
 }
