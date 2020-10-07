@@ -21,10 +21,12 @@
   },
   "homepage": "https://github.com/2110521-2563-1-Software-Architecture/MoonMacrosystem#readme",
   "dependencies": {
+    "@types/react-router-dom": "^5.1.6",
     "antd": "^4.6.6",
     "axios": "^0.20.0",
     "react": "^16.12.0",
-    "react-dom": "^16.12.0"
+    "react-dom": "^16.12.0",
+    "react-router-dom": "^5.2.0"
   },
   "devDependencies": {
     "@types/react": "^16.8.24",
