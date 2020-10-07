@@ -5,7 +5,7 @@ const api: AxiosInstance = axios.create({
   headers: { 'X-Custom-Header': 'foobar' },
 })
 
-const signIn = (payload: any) => {
+const signInApi = (payload: any) => {
   // api
   //   .post('/user', payload)
   //   .then((response: AxiosResponse) => {
@@ -17,4 +17,4 @@ const signIn = (payload: any) => {
   return payload.username == 'username' && payload.password == 'password'
 }
 
-export default signIn
+export default signInApi

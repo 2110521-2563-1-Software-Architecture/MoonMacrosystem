@@ -1,9 +1,7 @@
 import React, { CSSProperties } from 'react'
 import { Form, Input, Button, Checkbox, Layout, Typography } from 'antd'
 import logo from '../assets/img/logo.svg'
-import { loginPayload } from '../services/intf'
-import signInApi from '../services/api'
-
+import { registerPayload } from '../services/intf'
 //#region
 const { Header, Content } = Layout
 const { Title } = Typography
@@ -24,26 +22,20 @@ const layout = {
   labelCol: { span: 6 },
   wrapperCol: { span: 18 },
 }
-const tailLayout = {
-  wrapperCol: { offset: 6, span: 18 },
-}
 const formStyle: CSSProperties = {
   margin: '3em 10% 3em 5%',
 }
 //#endregion
 
-const Login = () => {
+const Register = () => {
   const register = () => {
     alert('redirect to register page')
   }
   const login = () => {
     alert('redirect to login page')
   }
-  const onFinish = (values: loginPayload) => {
+  const onFinish = (values: registerPayload) => {
     console.log('Success:', values)
-    if (signInApi(values)) {
-      alert('Login Success')
-    }
   }
   const onFinishFailed = (errorInfo: unknown) => {
     console.log('Failed:', errorInfo)
@@ -63,7 +55,7 @@ const Login = () => {
         </div>
       </Header>
       <Content style={{ margin: '0 20%' }}>
-        <Title style={titleStyle}>Login</Title>
+        <Title style={titleStyle}>Register</Title>
         <Form
           {...layout}
           name="login-form"
@@ -72,6 +64,14 @@ const Login = () => {
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
         >
+          <Form.Item
+            label="Display name"
+            name="displayname"
+            rules={[{ required: true, message: 'Please input your display name!' }]}
+          >
+            <Input />
+          </Form.Item>
+
           <Form.Item
             label="Username"
             name="username"
@@ -88,21 +88,17 @@ const Login = () => {
             <Input.Password />
           </Form.Item>
 
-          <Form.Item {...tailLayout} name="remember" valuePropName="checked">
-            <Checkbox>Remember me</Checkbox>
-          </Form.Item>
-
           <div style={{ textAlign: 'center', margin: '5em 0 2em 0' }}>
             <Button type="primary" htmlType="submit">
-              Submit
+              Register
             </Button>
           </div>
           <div style={{ textAlign: 'center' }}>
-            Don't have an account yet? <a onClick={register}>Register</a>
+            Already have an account? <a onClick={login}>Login</a>
           </div>
         </Form>
       </Content>
     </Layout>
   )
 }
-export default Login
+export default Register

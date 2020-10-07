@@ -1,10 +1,16 @@
-import React, { useState, createElement } from 'react'
+import React, { useState, createElement, CSSProperties } from 'react'
 import { Avatar, Comment, Tooltip } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
 import moment from 'moment'
 import { LikeOutlined, LikeFilled } from '@ant-design/icons'
 import { postIntf } from '../services/intf'
 
+const postStyle: CSSProperties = {
+  margin: '1em',
+  background: 'white',
+  padding: '0 1em',
+  borderRadius: '1em',
+}
 const PostItem = ({ name, content }: postIntf) => {
   const [likes, setLikes] = useState(0)
   const [action, setAction] = useState(null)
@@ -30,17 +36,19 @@ const PostItem = ({ name, content }: postIntf) => {
   ]
 
   return (
-    <Comment
-      actions={actions}
-      author={<a>{name}</a>}
-      avatar={<Avatar icon={<UserOutlined />} />}
-      content={<p>{content}</p>}
-      datetime={
-        <Tooltip title={moment().format('YYYY-MM-DD HH:mm:ss')}>
-          <span>{moment().fromNow()}</span>
-        </Tooltip>
-      }
-    />
+    <div style={postStyle}>
+      <Comment
+        actions={actions}
+        author={<a>{name}</a>}
+        avatar={<Avatar icon={<UserOutlined />} />}
+        content={<p>{content}</p>}
+        datetime={
+          <Tooltip title={moment().format('YYYY-MM-DD HH:mm:ss')}>
+            <span>{moment().fromNow()}</span>
+          </Tooltip>
+        }
+      />
+    </div>
   )
 }
 export default PostItem

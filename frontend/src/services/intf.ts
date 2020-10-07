@@ -3,6 +3,11 @@ export interface loginPayload {
   password: string
   remember: boolean
 }
+export interface registerPayload {
+  displayname: string
+  username: string
+  password: string
+}
 export interface postIntf {
   name: string
   content: string
