@@ -1,4 +1,5 @@
 import React, { CSSProperties } from 'react'
+import { useHistory } from 'react-router-dom'
 import { Form, Input, Button, Checkbox, Layout, Typography } from 'antd'
 import logo from '../assets/img/logo.svg'
 import { loginPayload } from '../services/intf'
@@ -34,16 +35,18 @@ const formStyle: CSSProperties = {
 //#endregion
 
 const Login = () => {
-  const register = () => {
-    alert('redirect to register page')
+  const history = useHistory()
+
+  const redirectToRegister = () => {
+    history.push('/register')
   }
-  const login = () => {
-    alert('redirect to login page')
+  const redirectToLogin = () => {
+    history.push('/')
   }
   const onFinish = (values: loginPayload) => {
     console.log('Success:', values)
     if (signInApi(values)) {
-      alert('Login Success')
+      history.push('/home')
     }
   }
   const onFinishFailed = (errorInfo: unknown) => {
@@ -55,10 +58,10 @@ const Login = () => {
       <Header style={headerStyle}>
         <img src={logo} alt="Tumrai" style={{ maxHeight: '100%', maxWidth: '100%' }} />
         <div style={{ display: 'inline-block' }}>
-          <Button type="default" style={{ marginRight: '1em' }} onClick={register}>
+          <Button type="default" style={{ marginRight: '1em' }} onClick={redirectToRegister}>
             Register
           </Button>
-          <Button type="primary" onClick={login}>
+          <Button type="primary" onClick={redirectToLogin}>
             Login
           </Button>
         </div>
@@ -99,7 +102,7 @@ const Login = () => {
             </Button>
           </div>
           <div style={{ textAlign: 'center' }}>
-            Don't have an account yet? <a onClick={register}>Register</a>
+            Don't have an account yet? <a onClick={redirectToRegister}>Register</a>
           </div>
         </Form>
       </Content>

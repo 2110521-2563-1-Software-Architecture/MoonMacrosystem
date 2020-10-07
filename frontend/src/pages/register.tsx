@@ -1,7 +1,9 @@
 import React, { CSSProperties } from 'react'
+import { useHistory } from 'react-router-dom'
 import { Form, Input, Button, Layout, Typography } from 'antd'
 import logo from '../assets/img/logo.svg'
 import { registerPayload } from '../services/intf'
+import { Redirect } from 'react-router-dom'
 
 //#region
 const { Header, Content, Footer } = Layout
@@ -30,14 +32,18 @@ const formStyle: CSSProperties = {
 //#endregion
 
 const Register = () => {
-  const register = () => {
-    alert('redirect to register page')
+  const history = useHistory()
+
+  const redirectToRegister = () => {
+    history.push('/register')
   }
-  const login = () => {
-    alert('redirect to login page')
+  const redirectToLogin = () => {
+    history.push('/')
   }
+
   const onFinish = (values: registerPayload) => {
     console.log('Success:', values)
+    history.push('/')
   }
   const onFinishFailed = (errorInfo: unknown) => {
     console.log('Failed:', errorInfo)
@@ -48,10 +54,10 @@ const Register = () => {
       <Header style={headerStyle}>
         <img src={logo} alt="Tumrai" style={{ maxHeight: '100%', maxWidth: '100%' }} />
         <div style={{ display: 'inline-block' }}>
-          <Button type="default" style={{ marginRight: '1em' }} onClick={register}>
+          <Button type="default" style={{ marginRight: '1em' }} onClick={redirectToRegister}>
             Register
           </Button>
-          <Button type="primary" onClick={login}>
+          <Button type="primary" onClick={redirectToLogin}>
             Login
           </Button>
         </div>
@@ -89,14 +95,35 @@ const Register = () => {
           >
             <Input.Password />
           </Form.Item>
-
+          <Form.Item
+            name="confirm"
+            label="Confirm Password"
+            dependencies={['password']}
+            hasFeedback
+            rules={[
+              {
+                required: true,
+                message: 'Please confirm your password!',
+              },
+              ({ getFieldValue }) => ({
+                validator(rule, value) {
+                  if (!value || getFieldValue('password') === value) {
+                    return Promise.resolve()
+                  }
+                  return Promise.reject('The two passwords that you entered do not match!')
+                },
+              }),
+            ]}
+          >
+            <Input.Password />
+          </Form.Item>
           <div style={{ textAlign: 'center', margin: '5em 0 2em 0' }}>
             <Button type="primary" htmlType="submit">
               Register
             </Button>
           </div>
           <div style={{ textAlign: 'center' }}>
-            Already have an account? <a onClick={login}>Login</a>
+            Already have an account? <a onClick={redirectToLogin}>Login</a>
           </div>
         </Form>
       </Content>

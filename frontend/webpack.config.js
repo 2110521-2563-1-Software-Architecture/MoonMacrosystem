@@ -17,6 +17,7 @@ module.exports = {
       maxModules: 0,
     },
     port: 3001,
+    historyApiFallback: true,
   },
   module: {
     rules: [

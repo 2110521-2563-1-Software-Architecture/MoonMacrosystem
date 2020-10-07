@@ -10,8 +10,8 @@ export default function App() {
     <BrowserRouter>
       <Switch>
         <Route path="/" exact component={Login} />
-        <Route path="/register" exact component={Register} />
-        <Route path="/home" exact component={Timeline} />
+        <Route path="/register" component={Register} />
+        <Route path="/home" component={Timeline} />
       </Switch>
     </BrowserRouter>
   )
