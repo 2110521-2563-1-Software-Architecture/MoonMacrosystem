@@ -5,7 +5,7 @@ import { loginPayload } from '../services/intf'
 import signInApi from '../services/api'
 
 //#region
-const { Header, Content } = Layout
+const { Header, Content, Footer } = Layout
 const { Title } = Typography
 
 const headerStyle: CSSProperties = {
@@ -14,6 +14,7 @@ const headerStyle: CSSProperties = {
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'space-between',
+  marginBottom: '0.1em',
 }
 const titleStyle: CSSProperties = {
   textAlign: 'center',
@@ -28,7 +29,7 @@ const tailLayout = {
   wrapperCol: { offset: 6, span: 18 },
 }
 const formStyle: CSSProperties = {
-  margin: '3em 10% 3em 5%',
+  margin: '1em 10% 3em 5%',
 }
 //#endregion
 
@@ -50,7 +51,7 @@ const Login = () => {
   }
 
   return (
-    <Layout hasSider={false} style={{ background: 'white' }}>
+    <Layout hasSider={false} style={{ background: '#f0f2f5' }}>
       <Header style={headerStyle}>
         <img src={logo} alt="Tumrai" style={{ maxHeight: '100%', maxWidth: '100%' }} />
         <div style={{ display: 'inline-block' }}>
@@ -62,7 +63,7 @@ const Login = () => {
           </Button>
         </div>
       </Header>
-      <Content style={{ margin: '0 20%' }}>
+      <Content style={{ padding: '0 20%', background: 'white' }}>
         <Title style={titleStyle}>Login</Title>
         <Form
           {...layout}
@@ -102,6 +103,7 @@ const Login = () => {
           </div>
         </Form>
       </Content>
+      <Footer style={{ background: 'white' }} />
     </Layout>
   )
 }

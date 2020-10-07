@@ -1,9 +1,12 @@
-import React, { useState, createElement, CSSProperties } from 'react'
-import { Avatar, Comment, Tooltip } from 'antd'
+import React, { useState, createElement, CSSProperties, useEffect } from 'react'
+import { Avatar, Comment, List, Tooltip, Typography } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
 import moment from 'moment'
 import { LikeOutlined, LikeFilled } from '@ant-design/icons'
 import { postIntf } from '../services/intf'
+import CommentItem from './commentitem'
+
+const { Text } = Typography
 
 const postStyle: CSSProperties = {
   margin: '1em',
@@ -11,6 +14,7 @@ const postStyle: CSSProperties = {
   padding: '0 1em',
   borderRadius: '1em',
 }
+
 const PostItem = ({ name, content }: postIntf) => {
   const [likes, setLikes] = useState(0)
   const [action, setAction] = useState(null)
@@ -39,14 +43,15 @@ const PostItem = ({ name, content }: postIntf) => {
     <div style={postStyle}>
       <Comment
         actions={actions}
-        author={<a>{name}</a>}
+        author={<Text style={{ fontSize: '0.9rem', fontWeight: 'bold' }}>{name}</Text>}
         avatar={<Avatar icon={<UserOutlined />} />}
-        content={<p>{content}</p>}
+        content={<Text style={{ fontSize: '0.9rem' }}>{content}</Text>}
         datetime={
           <Tooltip title={moment().format('YYYY-MM-DD HH:mm:ss')}>
-            <span>{moment().fromNow()}</span>
+            <span style={{ fontSize: '0.8rem' }}>{moment().fromNow()}</span>
           </Tooltip>
         }
+        children={<CommentItem name="test" content="55555" />}
       />
     </div>
   )

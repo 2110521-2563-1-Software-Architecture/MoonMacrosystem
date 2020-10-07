@@ -1,9 +1,10 @@
 import React, { CSSProperties } from 'react'
-import { Form, Input, Button, Checkbox, Layout, Typography } from 'antd'
+import { Form, Input, Button, Layout, Typography } from 'antd'
 import logo from '../assets/img/logo.svg'
 import { registerPayload } from '../services/intf'
+
 //#region
-const { Header, Content } = Layout
+const { Header, Content, Footer } = Layout
 const { Title } = Typography
 
 const headerStyle: CSSProperties = {
@@ -12,6 +13,7 @@ const headerStyle: CSSProperties = {
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'space-between',
+  marginBottom: '0.1em',
 }
 const titleStyle: CSSProperties = {
   textAlign: 'center',
@@ -23,7 +25,7 @@ const layout = {
   wrapperCol: { span: 18 },
 }
 const formStyle: CSSProperties = {
-  margin: '3em 10% 3em 5%',
+  margin: '1em 10% 3em 5%',
 }
 //#endregion
 
@@ -42,7 +44,7 @@ const Register = () => {
   }
 
   return (
-    <Layout hasSider={false} style={{ background: 'white' }}>
+    <Layout hasSider={false} style={{ background: '#f0f2f5' }}>
       <Header style={headerStyle}>
         <img src={logo} alt="Tumrai" style={{ maxHeight: '100%', maxWidth: '100%' }} />
         <div style={{ display: 'inline-block' }}>
@@ -54,7 +56,7 @@ const Register = () => {
           </Button>
         </div>
       </Header>
-      <Content style={{ margin: '0 20%' }}>
+      <Content style={{ padding: '0 20%', background: 'white' }}>
         <Title style={titleStyle}>Register</Title>
         <Form
           {...layout}
@@ -98,6 +100,7 @@ const Register = () => {
           </div>
         </Form>
       </Content>
+      <Footer style={{ background: 'white' }} />
     </Layout>
   )
 }
