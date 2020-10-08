@@ -1,7 +1,7 @@
 FROM node:13.1-alpine as build
 
 WORKDIR /usr/src/app
-COPY package.json yarn.lock ./
+COPY package.json yarn.lock webpack.config.js ./
 RUN yarn cache clean && yarn --update-checksums
 COPY . ./
 RUN yarn && yarn build
