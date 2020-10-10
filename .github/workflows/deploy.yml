@@ -35,9 +35,9 @@ jobs:
       - name: Deploy docker to the host
         run: |
           if ! test -z $(docker ps -a -q); then docker stop $(docker ps -a -q); fi
-          docker login docker.pkg.github.com -u $DOCKER_USERNAME -p $GITHUB_TOKEN
-          docker pull docker.pkg.github.com/2110521-2563-1-Software-Architecture/MoonMacrosystem/mm-backend:latest
-          docker run -dit -p 80:5420 docker.pkg.github.com/2110521-2563-1-Software-Architecture/MoonMacrosystem/mm-backend:latest
+          docker login docker.pkg.github.com -u $docker_username -p $github_token
+          docker pull docker.pkg.github.com/2110521-2563-1-software-architecture/moonmacrosystem/mm-backend:latest
+          docker run -dit -p 80:5420 docker.pkg.github.com/2110521-2563-1-software-architecture/moonmacrosystem/mm-backend:latest
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
