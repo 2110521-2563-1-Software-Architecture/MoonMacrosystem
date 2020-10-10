@@ -8,8 +8,6 @@ COPY ./backend/ ./
 RUN yarn build
 
 # Stage - Production
-FROM nginx:1.17-alpine
-COPY --from=build /usr/src/app/build /usr/share/nginx/html
 EXPOSE 5420
-CMD ["nginx", "-g", "daemon off;"]
+CMD [ "node", "./build/index.js" ]
 #End of Backend Dockerfile
