@@ -5,9 +5,13 @@ import { login, register } from './api/user'
 require('dotenv').config()
 
 const app = express()
+const cors = require('cors')
 const bodyParser = require('body-parser')
+
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(cors())
+
 const { PORT = 5420 } = process.env
 
 const mongoose = require('mongoose')
