@@ -10,6 +10,6 @@ RUN yarn build
 # Stage - Production
 FROM nginx:1.17-alpine
 COPY --from=build /usr/src/app/build /usr/share/nginx/html
-EXPOSE 80
+EXPOSE 5420
 CMD ["nginx", "-g", "daemon off;"]
 #End of Backend Dockerfile
