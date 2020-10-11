@@ -19,6 +19,14 @@ jobs:
           yarn
         env:
           CI: true
+      - name: Create .env file
+        uses: SpicyPizza/create-envfile@v1.0
+        with:
+          envkey_DB_HOST: "moonmacrosystem0.ybexf.gcp.mongodb.net"
+          envkey_DB_NAME: "database"
+          envkey_DB_USER: ${{ secrets.DB_USER }}
+          envkey_DB_PASS: ${{ secrets.DB_PASS }}
+          file_name: backend/.env
       - name: Publish to Github Packages Registry
         uses: elgohr/Publish-Docker-Github-Action@master
         with:

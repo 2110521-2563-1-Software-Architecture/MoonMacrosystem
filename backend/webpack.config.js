@@ -1,6 +1,7 @@
 const path = require('path')
 const nodeExternals = require('webpack-node-externals')
 const NodemonPlugin = require('nodemon-webpack-plugin')
+const Dotenv = require('dotenv-webpack')
 
 const { NODE_ENV = 'production' } = process.env
 
@@ -26,5 +27,5 @@ module.exports = {
   watch: NODE_ENV === 'development',
   // watch: true,
   externals: [nodeExternals()],
-  plugins: [new NodemonPlugin()],
+  plugins: [new NodemonPlugin(), new Dotenv()],
 }
