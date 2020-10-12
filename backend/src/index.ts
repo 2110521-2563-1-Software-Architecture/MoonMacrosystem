@@ -36,7 +36,7 @@ app.post('/login', (req: IRequest<{ username: string; password: string }>, res: 
   login(req, res).catch((err) => {
     console.log('Error Login')
     console.log(err)
-    res.status(400)
+    return
   })
 })
 
@@ -44,7 +44,7 @@ app.post('/register', (req: IRequest<{ username: string; password: string; displ
   register(req, res).catch((err) => {
     console.log('Error Register')
     console.log(err)
-    res.status(400)
+    return
   })
 })
 
