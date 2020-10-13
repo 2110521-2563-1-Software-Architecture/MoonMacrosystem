@@ -4,6 +4,7 @@ import { UserOutlined } from '@ant-design/icons'
 import PostItem from '../component/postitem'
 import { PictureTwoTone } from '@ant-design/icons'
 import logo from '../assets/img/logo.svg'
+import { IPost } from '../services/intf'
 
 const { Header, Content, Footer } = Layout
 const { Text } = Typography
@@ -64,7 +65,7 @@ const Timeline = () => {
         <List
           itemLayout="horizontal"
           dataSource={data}
-          renderItem={(item) => <PostItem name={item.name} content={item.content} />}
+          renderItem={(item: IPost) => <PostItem name={item.name} content={item.content} />}
         />
         <BackTop />
       </Content>

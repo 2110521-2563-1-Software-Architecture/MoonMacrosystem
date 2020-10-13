@@ -2,8 +2,8 @@ import React, { CSSProperties } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Form, Input, Button, Checkbox, Layout, Typography } from 'antd'
 import logo from '../assets/img/logo.svg'
-import { loginPayload } from '../services/intf'
-import signInApi from '../services/api'
+import { ILogin } from '../services/intf'
+import { authentication } from '../services/api'
 
 //#region
 const { Header, Content, Footer } = Layout
@@ -43,11 +43,22 @@ const Login = () => {
   const redirectToLogin = () => {
     history.push('/')
   }
-  const onFinish = (values: loginPayload) => {
-    console.log('Success:', values)
-    if (signInApi(values)) {
-      history.push('/home')
+  const onFinish = (values: { username: string; password: string; remember: boolean }) => {
+    var payload: ILogin = {
+      username: values.username,
+      password: values.password,
     }
+    console.log(payload)
+    authentication.login(
+      payload,
+      ({ data }: any) => {
+        console.log(data)
+        history.push('/home')
+      },
+      (response: any) => {
+        console.log(response.data)
+      }
+    )
   }
   const onFinishFailed = (errorInfo: unknown) => {
     console.log('Failed:', errorInfo)

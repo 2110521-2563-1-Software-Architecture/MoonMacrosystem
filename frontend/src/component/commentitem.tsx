@@ -2,10 +2,10 @@ import React from 'react'
 import { Avatar, Comment, Tooltip, Typography } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
 import moment from 'moment'
-import { postIntf } from '../services/intf'
+import { IPost } from '../services/intf'
 
 const { Text } = Typography
-const CommentItem = ({ name, content }: postIntf) => {
+const CommentItem = ({ name, content }: IPost) => {
   return (
     <Comment
       author={<Text style={{ fontSize: '0.9rem', fontWeight: 'bold' }}>{name}</Text>}

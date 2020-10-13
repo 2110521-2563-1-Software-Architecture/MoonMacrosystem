@@ -1,14 +1,13 @@
-export interface loginPayload {
-  username: string
-  password: string
-  remember: boolean
-}
-export interface registerPayload {
-  displayname: string
+export interface ILogin {
   username: string
   password: string
 }
-export interface postIntf {
+export interface IRegister {
+  username: string
+  password: string
+  displayName: string
+}
+export interface IPost {
   name: string
   content: string
 }

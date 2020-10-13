@@ -3,7 +3,7 @@ import { Avatar, Comment, List, Tooltip, Typography } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
 import moment from 'moment'
 import { LikeOutlined, LikeFilled } from '@ant-design/icons'
-import { postIntf } from '../services/intf'
+import { IPost } from '../services/intf'
 import CommentItem from './commentitem'
 
 const { Text } = Typography
@@ -15,7 +15,7 @@ const postStyle: CSSProperties = {
   borderRadius: '1em',
 }
 
-const PostItem = ({ name, content }: postIntf) => {
+const PostItem = ({ name, content }: IPost) => {
   const [likes, setLikes] = useState(0)
   const [action, setAction] = useState(null)
 

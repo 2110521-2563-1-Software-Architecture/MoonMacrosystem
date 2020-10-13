@@ -1,9 +1,9 @@
 import React, { CSSProperties } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Form, Input, Button, Layout, Typography } from 'antd'
+import { Form, Input, Button, Layout, Typography, message } from 'antd'
 import logo from '../assets/img/logo.svg'
-import { registerPayload } from '../services/intf'
-import { Redirect } from 'react-router-dom'
+import { IRegister } from '../services/intf'
+import { authentication } from '../services/api'
 
 //#region
 const { Header, Content, Footer } = Layout
@@ -41,9 +41,21 @@ const Register = () => {
     history.push('/')
   }
 
-  const onFinish = (values: registerPayload) => {
-    console.log('Success:', values)
-    history.push('/')
+  const onFinish = (values: IRegister) => {
+    authentication.register(
+      values,
+      ({ data }: any) => {
+        if (data.status == '200') {
+          message.success('Create account success!')
+          history.push('/')
+        } else {
+          message.error('Error : ' + data.body.message)
+        }
+      },
+      (response: any) => {
+        console.log(response.data)
+      }
+    )
   }
   const onFinishFailed = (errorInfo: unknown) => {
     console.log('Failed:', errorInfo)
