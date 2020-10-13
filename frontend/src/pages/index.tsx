@@ -1,6 +1,6 @@
 import React, { CSSProperties } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Form, Input, Button, Checkbox, Layout, Typography } from 'antd'
+import { Form, Input, Button, Checkbox, Layout, Typography, message } from 'antd'
 import logo from '../assets/img/logo.svg'
 import { ILogin } from '../services/intf'
 import { authentication } from '../services/api'
@@ -43,17 +43,20 @@ const Login = () => {
   const redirectToLogin = () => {
     history.push('/')
   }
-  const onFinish = (values: { username: string; password: string; remember: boolean }) => {
+  const onFinish = (values: any) => {
     var payload: ILogin = {
       username: values.username,
       password: values.password,
     }
-    console.log(payload)
     authentication.login(
       payload,
       ({ data }: any) => {
-        console.log(data)
-        history.push('/home')
+        if (data.status == '200') {
+          message.success('Login success!')
+          history.push('/home')
+        } else {
+          message.error('Username or Password is invalid')
+        }
       },
       (response: any) => {
         console.log(response.data)

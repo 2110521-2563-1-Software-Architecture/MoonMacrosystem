@@ -41,15 +41,20 @@ const Register = () => {
     history.push('/')
   }
 
-  const onFinish = (values: IRegister) => {
+  const onFinish = (values: any) => {
+    var payload: IRegister = {
+      username: values.username,
+      password: values.password,
+      displayName: values.displayName,
+    }
     authentication.register(
-      values,
+      payload,
       ({ data }: any) => {
         if (data.status == '200') {
           message.success('Create account success!')
           history.push('/')
         } else {
-          message.error('Error : ' + data.body.message)
+          message.error('Username is invalid')
         }
       },
       (response: any) => {
@@ -86,7 +91,7 @@ const Register = () => {
         >
           <Form.Item
             label="Display name"
-            name="displayname"
+            name="displayName"
             rules={[{ required: true, message: 'Please input your display name!' }]}
           >
             <Input />
