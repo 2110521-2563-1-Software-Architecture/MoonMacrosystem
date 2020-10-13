@@ -32,20 +32,19 @@ export async function register(
   const { salt, hash } = await hashPassword(password)
   const userSecret = new UserSecret({ username, hash, salt })
   const user = new User({ username, displayName })
-  await userSecret.save((err) => {
-    if (err) {
-      console.log(err)
-      res.send({ status: 400, body: { message: 'Bad Request, cannot save UserSecret', err } })
-    }
-  })
-  await user.save((err, product) => {
-    if (err) {
-      console.log(err)
-      res.send({ status: 400, body: { message: 'Bad Request, cannot save User', err } })
-    } else {
-      res.send({ status: 200, body: { message: 'User has been created', username: product.username } })
-    }
-  })
+  try {
+    await userSecret.save()
+  } catch (err) {
+    console.log('userSecret Error', err)
+    return res.send({ status: 400, body: { err, message: err.message } })
+  }
+  try {
+    const product = await user.save()
+    return res.send({ status: 200, body: { message: 'User has been created', username: product.username } })
+  } catch (err) {
+    console.log('user Error', err)
+    return res.send({ status: 400, body: { err, message: err.message } })
+  }
 }
 
 export async function login(req: IRequest<{ username: string; password: string }>, res: Response) {
@@ -56,13 +55,16 @@ export async function login(req: IRequest<{ username: string; password: string }
     if (err) {
       console.log(err)
       res.send({ status: 400, body: { message: 'Bad Request', err } })
+      return
     } else {
       const { username, hash, salt } = result[0]
       const valid = await verify(password, hash, salt)
       if (valid) {
         res.send({ status: 200, body: { message: 'Login Successful!', username: username } })
+        return
       } else {
         res.send({ status: 400, body: { message: 'Login Failed! Password is invalid', username: username } })
+        return
       }
     }
   })
