@@ -1,14 +1,18 @@
 import React from 'react'
-import { DatePicker } from 'antd'
-import banner from './assets/images/test.png'
-import 'antd/dist/antd.css'
+import { Switch, Route, Link, useRouteMatch, useParams, BrowserRouter } from 'react-router-dom'
+import 'antd/dist/antd.less'
+import Login from './pages'
+import Register from './pages/register'
+import Timeline from './pages/timeline'
 
 export default function App() {
   return (
-    <div>
-      Hello
-      <img src={banner} width="24" alt="bannger" />
-      <DatePicker />
-    </div>
+    <BrowserRouter>
+      <Switch>
+        <Route path="/" exact component={Login} />
+        <Route path="/register" component={Register} />
+        <Route path="/home" component={Timeline} />
+      </Switch>
+    </BrowserRouter>
   )
 }
