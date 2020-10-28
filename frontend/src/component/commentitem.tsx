@@ -11,11 +11,7 @@ const CommentItem = ({ name, content }: IPost) => {
       author={<Text style={{ fontSize: '0.9rem', fontWeight: 'bold' }}>{name}</Text>}
       avatar={<Avatar icon={<UserOutlined />} />}
       content={<Text style={{ fontSize: '0.9rem' }}>{content}</Text>}
-      datetime={
-        <Tooltip title={moment().format('YYYY-MM-DD HH:mm:ss')}>
-          <span>{moment().fromNow()}</span>
-        </Tooltip>
-      }
+      datetime={<span>{moment().fromNow()}</span>}
     />
   )
 }

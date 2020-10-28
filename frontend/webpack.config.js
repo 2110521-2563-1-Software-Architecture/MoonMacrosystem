@@ -39,6 +39,7 @@ module.exports = {
                   'primary-color': '#A55FC1',
                   'link-color': '#A55FC1',
                   'border-radius-base': '2px',
+                  'font-family': 'Sarabun',
                 },
                 javascriptEnabled: true,
               },

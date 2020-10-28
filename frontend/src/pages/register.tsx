@@ -5,7 +5,6 @@ import logo from '../assets/img/logo.svg'
 import { IRegister } from '../services/intf'
 import { authentication } from '../services/api'
 
-//#region
 const { Header, Content, Footer } = Layout
 const { Title } = Typography
 
@@ -29,7 +28,6 @@ const layout = {
 const formStyle: CSSProperties = {
   margin: '1em 10% 3em 5%',
 }
-//#endregion
 
 const Register = () => {
   const history = useHistory()

@@ -10,4 +10,7 @@ export interface IRegister {
 export interface IPost {
   name: string
   content: string
+  // picture: string[]
+  // video: string[]
+  // created: Date
 }

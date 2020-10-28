@@ -1,23 +1,16 @@
-import React, { CSSProperties } from 'react'
-import { Layout, List, Avatar, Comment, Input, BackTop, Typography } from 'antd'
+import React, { CSSProperties, useState, useEffect } from 'react'
+import { Layout, List, Avatar, Comment, Input, BackTop, Typography, Form, Button, Upload } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
 import PostItem from '../component/postitem'
-import { PictureTwoTone } from '@ant-design/icons'
 import logo from '../assets/img/logo.svg'
+import upload from '../assets/img/upload.svg'
 import { IPost } from '../services/intf'
 
 const { Header, Content, Footer } = Layout
 const { Text } = Typography
-const data = [
+const data1 = [
   { name: 'ploy', content: 'สวัสดี' },
   { name: 'ploy1234', content: 'hello' },
-  { name: 'ppppp', content: 'asdf' },
-  { name: 'ploy', content: 'hi' },
-  { name: 'ploy1234', content: 'hello' },
-  { name: 'ppppp', content: 'asdf' },
-  { name: 'ploy', content: 'hi' },
-  { name: 'ploy1234', content: 'hello' },
-  { name: 'ppppp', content: 'asdf' },
 ]
 const nname: string = 'namkangkrukrieiei'
 
@@ -27,7 +20,9 @@ const headerStyle: CSSProperties = {
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'space-between',
-  marginBottom: '0.1em',
+  width: '100%',
+  position: 'fixed',
+  zIndex: 1,
 }
 const postStyle: CSSProperties = {
   margin: '3em 1em 0em 1em',
@@ -41,9 +36,32 @@ const inputStyle: CSSProperties = {
 }
 
 const Timeline = () => {
-  const actions = [<PictureTwoTone />, <span>Upload picture / video</span>]
+  const [loading, setLoading] = useState(true)
+  const [data, setData] = useState<IPost[]>([])
+  const [fileList, setFileList] = useState(null)
+
+  const handleAddPost = (values: any) => {
+    //TODO
+    console.log(values)
+    //Upload file
+    var formData = new FormData()
+    if (fileList.length != 0) {
+      formData.append('picture', fileList)
+    }
+  }
+  const handleUpload = (values: any) => {
+    console.log(values)
+    setFileList(values.fileList)
+  }
+  const fetchTimeline = () => {
+    setData(data1)
+    setLoading(false)
+  }
+  useEffect(() => {
+    fetchTimeline()
+  })
   return (
-    <Layout hasSider={false} style={{ background: '#f0f2f5' }}>
+    <Layout hasSider={false} style={{ minHeight: '100vh', background: '#f0f2f5' }}>
       <Header style={headerStyle}>
         <img src={logo} alt="Tumrai" style={{ maxHeight: '100%', maxWidth: '100%' }} />
         <div style={{ display: 'inline-block' }}>
@@ -53,17 +71,36 @@ const Timeline = () => {
           </Text>
         </div>
       </Header>
-      <Content style={{ margin: '0 20%' }}>
+      <Content style={{ margin: '3rem 20% 0 20%' }}>
         <div style={postStyle}>
           <Comment
-            actions={actions}
             avatar={<Avatar icon={<UserOutlined />} />}
-            content={<Input placeholder="What's Up" size="middle" style={inputStyle} />}
+            content={
+              <>
+                <Form name="post-form" onFinish={handleAddPost}>
+                  <Form.Item name="content" style={{ marginBottom: 0 }}>
+                    <Input placeholder="What's Up" size="middle" style={inputStyle} />
+                  </Form.Item>
+                  <img src={upload} alt="Tumrai" style={{ maxHeight: '100%', maxWidth: '100%' }} />
+                  <Upload listType="picture" onChange={handleUpload}>
+                    <Button type="link" style={{ paddingLeft: 0 }}>
+                      Upload picture / video
+                    </Button>
+                  </Upload>
+                  <span style={{ float: 'right', marginTop: '1em' }}>
+                    <Button type="primary" htmlType="submit">
+                      Submit
+                    </Button>
+                  </span>
+                </Form>
+              </>
+            }
           />
         </div>
         <br />
         <List
           itemLayout="horizontal"
+          loading={loading}
           dataSource={data}
           renderItem={(item: IPost) => <PostItem name={item.name} content={item.content} />}
         />
