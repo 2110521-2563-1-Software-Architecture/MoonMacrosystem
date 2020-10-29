@@ -1,5 +1,6 @@
 import React, { CSSProperties, useState, useEffect } from 'react'
-import { Layout, List, Avatar, Comment, Input, BackTop, Typography, Form, Button, Upload } from 'antd'
+import { useHistory } from 'react-router-dom'
+import { Layout, List, Avatar, Comment, Input, BackTop, Typography, Form, Button, Upload, Dropdown, Menu } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
 import PostItem from '../component/postitem'
 import logo from '../assets/img/logo.svg'
@@ -12,7 +13,6 @@ const data1 = [
   { name: 'ploy', content: 'สวัสดี' },
   { name: 'ploy1234', content: 'hello' },
 ]
-const nname: string = 'namkangkrukrieiei'
 
 const headerStyle: CSSProperties = {
   boxSizing: 'border-box',
@@ -36,10 +36,16 @@ const inputStyle: CSSProperties = {
 }
 
 const Timeline = () => {
+  const history = useHistory()
+
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState<IPost[]>([])
   const [fileList, setFileList] = useState(null)
 
+  const handleLogOut = () => {
+    localStorage.setItem('ACCESS_TOKEN', 'false')
+    history.push('/')
+  }
   const handleAddPost = (values: any) => {
     //TODO
     console.log(values)
@@ -66,9 +72,21 @@ const Timeline = () => {
         <img src={logo} alt="Tumrai" style={{ maxHeight: '100%', maxWidth: '100%' }} />
         <div style={{ display: 'inline-block' }}>
           <Avatar icon={<UserOutlined />} />
-          <Text strong style={{ paddingLeft: '0.5em' }}>
-            {nname}
-          </Text>
+          <Dropdown
+            overlay={
+              <Menu>
+                <Menu.Item>
+                  <a onClick={handleLogOut}>Log Out</a>
+                </Menu.Item>
+              </Menu>
+            }
+            placement="bottomRight"
+            arrow={true}
+          >
+            <Text strong style={{ paddingLeft: '0.5em' }}>
+              {localStorage.getItem('USERNAME')}
+            </Text>
+          </Dropdown>
         </div>
       </Header>
       <Content style={{ margin: '3rem 20% 0 20%' }}>
