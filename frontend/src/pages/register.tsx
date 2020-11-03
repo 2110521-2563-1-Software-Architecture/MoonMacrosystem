@@ -4,6 +4,7 @@ import { Form, Input, Button, Layout, Typography, message } from 'antd'
 import logo from '../assets/img/logo.svg'
 import { IRegister } from '../services/intf'
 import { authentication } from '../services/api'
+import { redirectTo } from '../services/redirect'
 
 const { Header, Content, Footer } = Layout
 const { Title } = Typography
@@ -30,13 +31,11 @@ const formStyle: CSSProperties = {
 }
 
 const Register = () => {
-  const history = useHistory()
-
   const redirectToRegister = () => {
-    history.push('/register')
+    redirectTo('/register')
   }
   const redirectToLogin = () => {
-    history.push('/')
+    redirectTo('/')
   }
 
   const onFinish = (values: any) => {
@@ -50,7 +49,7 @@ const Register = () => {
       ({ data }: any) => {
         if (data.status == '200') {
           message.success('Create account success!')
-          history.push('/')
+          redirectTo('/')
         } else {
           message.error('Username is invalid')
         }

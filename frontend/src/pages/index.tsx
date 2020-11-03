@@ -4,6 +4,7 @@ import { Form, Input, Button, Checkbox, Layout, Typography, message } from 'antd
 import logo from '../assets/img/logo.svg'
 import { ILogin } from '../services/intf'
 import { authentication } from '../services/api'
+import { redirectTo } from '../services/redirect'
 
 const { Header, Content, Footer } = Layout
 const { Title } = Typography
@@ -33,13 +34,11 @@ const formStyle: CSSProperties = {
 }
 
 const Login = () => {
-  const history = useHistory()
-
   const redirectToRegister = () => {
-    history.push('/register')
+    redirectTo('/register')
   }
   const redirectToLogin = () => {
-    history.push('/')
+    redirectTo('/')
   }
   const onFinish = (values: any) => {
     var payload: ILogin = {
@@ -55,7 +54,7 @@ const Login = () => {
           localStorage.setItem('USERNAME', data.body.username)
           localStorage.setItem('ACCESS_TOKEN', 'true')
           message.success('Login success!')
-          history.push('/home')
+          redirectTo('/home')
         } else {
           message.error('Username or Password is invalid')
         }

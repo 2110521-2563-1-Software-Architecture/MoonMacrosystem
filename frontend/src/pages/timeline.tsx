@@ -6,9 +6,11 @@ import PostItem from '../component/postitem'
 import logo from '../assets/img/logo.svg'
 import upload from '../assets/img/upload.svg'
 import { IPost } from '../services/intf'
+import { redirectTo } from '../services/redirect'
 
 const { Header, Content, Footer } = Layout
 const { Text } = Typography
+const { Search } = Input
 const data1 = [
   { name: 'ploy', content: 'สวัสดี' },
   { name: 'ploy1234', content: 'hello' },
@@ -36,15 +38,15 @@ const inputStyle: CSSProperties = {
 }
 
 const Timeline = () => {
-  const history = useHistory()
-
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState<IPost[]>([])
   const [fileList, setFileList] = useState(null)
+  const [follwing, setFollwing] = useState(null)
+  const [follwer, setFollwer] = useState(null)
 
   const handleLogOut = () => {
     localStorage.setItem('ACCESS_TOKEN', 'false')
-    history.push('/')
+    redirectTo('/')
   }
   const handleAddPost = (values: any) => {
     //TODO
@@ -59,8 +61,20 @@ const Timeline = () => {
     console.log(values)
     setFileList(values.fileList)
   }
+  const onSearch = (values: String) => {
+    console.log(values)
+    //TODO
+  }
+  const showFollowing = () => {
+    //TODO
+  }
+  const showFollower = () => {
+    //TODO
+  }
   const fetchTimeline = () => {
     setData(data1)
+    setFollwing(14)
+    setFollwer(8)
     setLoading(false)
   }
   useEffect(() => {
@@ -71,21 +85,39 @@ const Timeline = () => {
       <Header style={headerStyle}>
         <img src={logo} alt="Tumrai" style={{ maxHeight: '100%', maxWidth: '100%' }} />
         <div style={{ display: 'inline-block' }}>
-          <Avatar icon={<UserOutlined />} />
+          <Search
+            placeholder="Find your friends"
+            onSearch={onSearch}
+            style={{ width: 300, height: 32, marginLeft: 10 }}
+          />
+        </div>
+        <div style={{ display: 'inline-block' }}>
           <Dropdown
             overlay={
-              <Menu>
+              <Menu style={{ width: 150 }}>
+                <Menu.Item>
+                  <a onClick={showFollowing}>
+                    <span style={{ color: '#A55FC1' }}>{follwing}</span> Following
+                  </a>
+                </Menu.Item>
+                <Menu.Item>
+                  <a onClick={showFollower}>
+                    <span style={{ color: '#A55FC1' }}>{follwer}</span> Followers
+                  </a>
+                </Menu.Item>
                 <Menu.Item>
                   <a onClick={handleLogOut}>Log Out</a>
                 </Menu.Item>
               </Menu>
             }
             placement="bottomRight"
-            arrow={true}
           >
-            <Text strong style={{ paddingLeft: '0.5em' }}>
-              {localStorage.getItem('USERNAME')}
-            </Text>
+            <span>
+              <Avatar icon={<UserOutlined />} />
+              <Text strong style={{ paddingLeft: '0.5em' }}>
+                {localStorage.getItem('USERNAME')}
+              </Text>
+            </span>
           </Dropdown>
         </div>
       </Header>
