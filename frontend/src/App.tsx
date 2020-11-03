@@ -5,6 +5,7 @@ import PrivateRoute from './component/privateroute'
 import Login from './pages'
 import Register from './pages/register'
 import Timeline from './pages/timeline'
+import SearchResult from './pages/searchresult'
 
 export default function App() {
   return (
@@ -13,6 +14,11 @@ export default function App() {
         <Route path="/" exact component={Login} />
         <Route path="/register" component={Register} />
         <PrivateRoute isSignedIn={localStorage.getItem('ACCESS_TOKEN') == 'true'} path="/home" component={Timeline} />
+        <PrivateRoute
+          isSignedIn={localStorage.getItem('ACCESS_TOKEN') == 'true'}
+          path="/result"
+          component={SearchResult}
+        />
       </Switch>
     </BrowserRouter>
   )

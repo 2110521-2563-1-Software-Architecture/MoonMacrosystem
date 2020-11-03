@@ -10,7 +10,7 @@ interface IFriend {
 const { Text } = Typography
 
 const UserListItem = ({ id, name }: IFriend) => {
-  const handleUnfollow = () => {
+  const handleUnfollow = (e: any) => {
     //TODO unfollow by id
   }
   return (
