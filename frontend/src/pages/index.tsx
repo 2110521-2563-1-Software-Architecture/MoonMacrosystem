@@ -67,7 +67,7 @@ const Login = () => {
   const onFinishFailed = (errorInfo: unknown) => {
     console.log('Failed:', errorInfo)
   }
-  useEffect(() => {})
+  useEffect(() => {}, [])
   return (
     <Layout hasSider={false} style={{ background: '#f0f2f5' }}>
       <Header style={headerStyle}>
