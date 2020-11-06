@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Avatar, Button, Comment, Typography } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
 
@@ -10,8 +10,16 @@ interface IFriend {
 const { Text } = Typography
 
 const UserListItem = ({ id, name }: IFriend) => {
-  const handleUnfollow = (e: any) => {
-    //TODO unfollow by id
+  const [isFollow, setIsFollow] = useState(true)
+
+  const handleOnClick = (e: any) => {
+    if (isFollow) {
+      setIsFollow(false)
+      //TODO unfollow by id
+    } else {
+      setIsFollow(true)
+      //TODO follow by id
+    }
   }
   return (
     <div
@@ -26,9 +34,15 @@ const UserListItem = ({ id, name }: IFriend) => {
         <Avatar icon={<UserOutlined />} />
         <Text style={{ fontSize: '0.9rem', fontWeight: 'bold', paddingLeft: '1rem' }}>{name}</Text>
       </div>
-      <Button type="default" onClick={handleUnfollow}>
-        Unfollow
-      </Button>
+      {isFollow ? (
+        <Button type="default" onClick={handleOnClick}>
+          Unfollow
+        </Button>
+      ) : (
+        <Button type="primary" onClick={handleOnClick}>
+          Follow
+        </Button>
+      )}
     </div>
   )
 }
