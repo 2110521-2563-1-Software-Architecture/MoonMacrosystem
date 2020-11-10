@@ -1,11 +1,11 @@
-import React, { CSSProperties } from 'react'
+import React, { CSSProperties, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Form, Input, Button, Checkbox, Layout, Typography, message } from 'antd'
 import logo from '../assets/img/logo.svg'
 import { ILogin } from '../services/intf'
 import { authentication } from '../services/api'
+import { redirectTo } from '../services/redirect'
 
-//#region
 const { Header, Content, Footer } = Layout
 const { Title } = Typography
 
@@ -32,16 +32,13 @@ const tailLayout = {
 const formStyle: CSSProperties = {
   margin: '1em 10% 3em 5%',
 }
-//#endregion
 
 const Login = () => {
-  const history = useHistory()
-
   const redirectToRegister = () => {
-    history.push('/register')
+    redirectTo('/register')
   }
   const redirectToLogin = () => {
-    history.push('/')
+    redirectTo('/')
   }
   const onFinish = (values: any) => {
     var payload: ILogin = {
@@ -52,8 +49,12 @@ const Login = () => {
       payload,
       ({ data }: any) => {
         if (data.status == '200') {
+          console.log(data)
+          localStorage.setItem('REMEMBER', values.remember)
+          localStorage.setItem('USERNAME', data.body.username)
+          localStorage.setItem('ACCESS_TOKEN', 'true')
           message.success('Login success!')
-          history.push('/home')
+          redirectTo('/home')
         } else {
           message.error('Username or Password is invalid')
         }
@@ -66,7 +67,7 @@ const Login = () => {
   const onFinishFailed = (errorInfo: unknown) => {
     console.log('Failed:', errorInfo)
   }
-
+  useEffect(() => {}, [])
   return (
     <Layout hasSider={false} style={{ background: '#f0f2f5' }}>
       <Header style={headerStyle}>
@@ -86,7 +87,10 @@ const Login = () => {
           {...layout}
           name="login-form"
           style={formStyle}
-          initialValues={{ remember: true }}
+          initialValues={{
+            remember: true,
+            username: localStorage.getItem('REMEMBER') ? localStorage.getItem('USERNAME') : null,
+          }}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
         >

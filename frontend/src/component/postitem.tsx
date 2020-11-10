@@ -1,5 +1,5 @@
 import React, { useState, createElement, CSSProperties } from 'react'
-import { Avatar, Comment, List, Tooltip, Typography, Form, Button, Input } from 'antd'
+import { Avatar, Comment, List, Tooltip, Typography, Form, Button, Input, Menu, Dropdown } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
 import moment from 'moment'
 import { LikeOutlined, LikeFilled } from '@ant-design/icons'
@@ -73,12 +73,29 @@ const PostItem = ({ name, content }: IPost) => {
     // TODO add comment + show new comment
     console.log(values)
   }
+  const handleUnfollow = () => {
+    //TODO
+  }
 
   return (
     <div style={postStyle}>
       <Comment
         actions={actions}
-        author={<Text style={{ fontSize: '0.9rem', fontWeight: 'bold' }}>{name}</Text>}
+        author={
+          <Dropdown
+            overlay={
+              <Menu>
+                <Menu.Item>
+                  <a onClick={handleUnfollow}>Unfollow</a>
+                </Menu.Item>
+              </Menu>
+            }
+            placement="topCenter"
+            arrow={true}
+          >
+            <Text style={{ fontSize: '0.9rem', fontWeight: 'bold' }}>{name}</Text>
+          </Dropdown>
+        }
         avatar={<Avatar icon={<UserOutlined />} />}
         content={
           <div style={{ display: 'block' }}>
