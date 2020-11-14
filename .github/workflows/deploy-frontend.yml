@@ -1,0 +1,57 @@
+name: build-frontend
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - frontend/**
+
+env:
+  IMAGE_NAME: 2110521-2563-1-software-architecture/moonmacrosystem/mm-frontend
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js 13.10
+        uses: actions/setup-node@v1
+        with:
+          node-version: "13.10"
+      - name: Install yarn and run unittest
+        run: |
+          cd backend
+          yarn
+        env:
+          CI: true
+      # - name: Create .env file
+      #   uses: SpicyPizza/create-envfile@v1.0
+      #   with:
+      #     envkey_DB_HOST: "moonmacrosystem0.ybexf.gcp.mongodb.net"
+      #     envkey_DB_NAME: "database"
+      #     envkey_DB_USER: ${{ secrets.DB_USER }}
+      #     envkey_DB_PASS: ${{ secrets.DB_PASS }}
+      #     file_name: backend/.env
+      - name: Publish to Github Packages Registry
+        uses: elgohr/Publish-Docker-Github-Action@master
+        with:
+          name: ${{ IMAGE_NAME }}
+          registry: docker.pkg.github.com
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          dockerfile: Dockerfile-frontend
+          tags: latest
+  deploy:
+    needs: [build]
+    runs-on: self-hosted
+    steps:
+      - name: Deploy docker to the host
+        run: |
+          if ! test -z $(docker ps -a -q --filter ancestor=docker.pkg.github.com/$IMAGE_NAME:latest); then docker stop $(docker ps -a -q --filter ancestor=docker.pkg.github.com/$IMAGE_NAME:latest); fi
+          docker login docker.pkg.github.com -u $DOCKER_USERNAME -p $GITHUB_TOKEN
+          docker pull docker.pkg.github.com/$IMAGE_NAME:latest
+          docker run -dit -p 3001:3001 $IMAGE_NAME:latest
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
