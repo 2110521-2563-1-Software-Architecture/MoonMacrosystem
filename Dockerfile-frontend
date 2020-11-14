@@ -5,7 +5,7 @@ FROM node:13.1-alpine as builder
 WORKDIR /app
 # Copy all files from current directory to working dir in image
 COPY ./frontend/package.json ./frontend/yarn.lock ./
-# RUN apk --update add --no-cache autoconf automake libpng-dev gcc make g++ zlib-dev
+RUN apk --update add --no-cache autoconf automake libpng-dev gcc make g++ zlib-dev
 RUN yarn cache clean && yarn --update-checksums
 COPY ./frontend ./
 # install node modules and build assets
