@@ -1,5 +1,5 @@
 # Name the node stage "builder"
-FROM node:13.1-alpine as builder
+FROM node:12 as builder
 
 # Set working directory
 WORKDIR /app
