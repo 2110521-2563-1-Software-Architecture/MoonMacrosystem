@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - frontend/**
-      - Dockerfile
+      - Dockerfile-frontend
       - .github/workflows/deploy-frontend.yml
 
 env:
