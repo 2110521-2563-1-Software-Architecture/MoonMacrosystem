@@ -3,6 +3,10 @@ name: build
 on:
   push:
     branches: [main]
+  paths:
+    - backend/**
+env:
+  IMAGE_NAME: 2110521-2563-1-software-architecture/moonmacrosystem/mm-backend
 
 jobs:
   build:
@@ -30,7 +34,7 @@ jobs:
       - name: Publish to Github Packages Registry
         uses: elgohr/Publish-Docker-Github-Action@master
         with:
-          name: 2110521-2563-1-Software-Architecture/MoonMacrosystem/mm-backend
+          name: $IMAGE_NAME
           registry: docker.pkg.github.com
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.GITHUB_TOKEN }}
@@ -44,8 +48,8 @@ jobs:
         run: |
           if ! test -z $(docker ps -a -q); then docker stop $(docker ps -a -q); fi
           docker login docker.pkg.github.com -u $DOCKER_USERNAME -p $GITHUB_TOKEN
-          docker pull docker.pkg.github.com/2110521-2563-1-software-architecture/moonmacrosystem/mm-backend:latest
-          docker run -dit -p 5420:5420 docker.pkg.github.com/2110521-2563-1-software-architecture/moonmacrosystem/mm-backend:latest
+          docker pull docker.pkg.github.com/$IMAGE_NAME:latest
+          docker run -dit -p 5420:5420 docker.pkg.github.com/$IMAGE_NAME:latest
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
