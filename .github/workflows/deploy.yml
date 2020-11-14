@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - backend/**
+      - Dockerfile
+      - .github/workflows/deploy.yml
 
 env:
   IMAGE_NAME: 2110521-2563-1-software-architecture/moonmacrosystem/mm-backend

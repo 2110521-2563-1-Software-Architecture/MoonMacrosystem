@@ -6,6 +6,8 @@ on:
       - main
     paths:
       - frontend/**
+      - Dockerfile-frontend
+      - .github/workflows/deploy-frontend.yml
 
 env:
   IMAGE_NAME: 2110521-2563-1-software-architecture/moonmacrosystem/mm-frontend
