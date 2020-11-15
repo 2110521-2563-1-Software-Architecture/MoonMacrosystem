@@ -1,22 +1,16 @@
 import React, { CSSProperties, useState, useEffect } from 'react'
-import { UserOutlined } from '@ant-design/icons'
 import { List, Avatar, Typography, Dropdown, Menu, Modal, Input } from 'antd'
 import logo from '../assets/img/logo.svg'
 import { redirectTo } from '../services/redirect'
 import UserListItem from '../component/userlistitem'
+import MyAvatar from '../assets/img/avatar-7.jpg'
+import { friend } from '../services/api'
 
 interface IFriend {
   id: string
-  name: string
+  username: string
 }
-const dataFollowing = [
-  { name: 'ploy', id: '123456' },
-  { name: 'pinn', id: '165485' },
-]
-const dataFollower = [
-  { name: 'namkang', id: '456789' },
-  { name: 'velody', id: '458889' },
-]
+
 const { Text } = Typography
 const { Search } = Input
 
@@ -60,15 +54,35 @@ const MainHeader = () => {
     setFollowingVisible(false)
     setFollowerVisible(false)
   }
-  useEffect(() => {
+  const fetchFriends = () => {
     //TODO fetch friend
-    setFollower(dataFollower)
-    setFollowing(dataFollowing)
-    setLoading(false)
+    var payload = { username: localStorage.USERNAME }
+    friend.fetchFollow(
+      payload,
+      ({ data }: any) => {
+        setFollower(data.followers)
+        setFollowing(data.followings)
+        setLoading(false)
+      },
+      (response: any) => {
+        console.log(response)
+      }
+    )
+  }
+  useEffect(() => {
+    fetchFriends()
   }, [])
   return (
     <div style={headerStyle}>
-      <img src={logo} alt="Tumrai" style={{ maxHeight: '100%', maxWidth: '100%' }} />
+      <img
+        src={logo}
+        alt="Tumrai"
+        style={{ maxHeight: '100%', maxWidth: '100%' }}
+        onClick={() => {
+          redirectTo('/home')
+        }}
+      />
+
       <div style={{ display: 'inline-block' }}>
         <Search
           placeholder="Find your friends"
@@ -98,7 +112,7 @@ const MainHeader = () => {
           placement="bottomRight"
         >
           <span>
-            <Avatar icon={<UserOutlined />} />
+            <Avatar icon={<img src={MyAvatar} />} />
             <Text strong style={{ paddingLeft: '0.5em' }}>
               {localStorage.getItem('USERNAME')}
             </Text>
@@ -118,8 +132,8 @@ const MainHeader = () => {
           <List
             itemLayout="horizontal"
             loading={loading}
-            dataSource={dataFollowing}
-            renderItem={(item: IFriend) => <UserListItem id={item.id} name={item.name} />}
+            dataSource={following}
+            renderItem={(item: IFriend) => <UserListItem id={item.id} username={item.username} />}
           />
         </Modal>
         <Modal
@@ -135,8 +149,8 @@ const MainHeader = () => {
           <List
             itemLayout="horizontal"
             loading={loading}
-            dataSource={dataFollower}
-            renderItem={(item: IFriend) => <UserListItem id={item.id} name={item.name} />}
+            dataSource={follower}
+            renderItem={(item: IFriend) => <UserListItem id={item.id} username={item.username} />}
           />
         </Modal>
       </div>

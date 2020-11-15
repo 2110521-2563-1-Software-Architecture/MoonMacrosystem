@@ -1,23 +1,21 @@
 import React, { CSSProperties, useState, useEffect } from 'react'
-import { Layout, List, Avatar, Comment, Input, BackTop, Form, Button, Upload, Typography } from 'antd'
-import PostItem from '../component/postitem'
-import { IPost } from '../services/intf'
+import { Layout, List, Typography } from 'antd'
 import MainHeader from '../component/mainheader'
 import UserListItem from '../component/userlistitem'
 
 interface IFriend {
   id: string
-  name: string
+  username: string
 }
 
 const { Content, Footer } = Layout
 const { Text } = Typography
 
 const data1 = [
-  { name: 'ploy', id: '123456' },
-  { name: 'pinn', id: '165485' },
-  { name: 'namkang', id: '456789' },
-  { name: 'velody', id: '458889' },
+  { username: 'ploy', id: '123456' },
+  { username: 'pinn', id: '165485' },
+  { username: 'namkang', id: '456789' },
+  { username: 'velody', id: '458889' },
 ]
 
 const inputStyle: CSSProperties = {
@@ -53,7 +51,7 @@ const SearchResult = () => {
             dataSource={data}
             renderItem={(item: IFriend) => (
               <List.Item>
-                <UserListItem id={item.id} name={item.name} />
+                <UserListItem id={item.id} username={item.username} />
               </List.Item>
             )}
           />

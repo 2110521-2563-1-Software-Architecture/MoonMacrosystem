@@ -49,7 +49,6 @@ const Login = () => {
       payload,
       ({ data }: any) => {
         if (data.status == '200') {
-          console.log(data)
           localStorage.setItem('REMEMBER', values.remember)
           localStorage.setItem('USERNAME', data.body.username)
           localStorage.setItem('ACCESS_TOKEN', 'true')

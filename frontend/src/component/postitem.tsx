@@ -1,12 +1,29 @@
-import React, { useState, createElement, CSSProperties } from 'react'
-import { Avatar, Comment, List, Tooltip, Typography, Form, Button, Input, Menu, Dropdown } from 'antd'
-import { UserOutlined } from '@ant-design/icons'
+import React, { useState, createElement, CSSProperties, useEffect } from 'react'
+import { Avatar, Comment, List, Tooltip, Typography, Form, Button, Input, Menu, Dropdown, Image, Modal } from 'antd'
 import moment from 'moment'
 import { LikeOutlined, LikeFilled } from '@ant-design/icons'
 import { IPost } from '../services/intf'
 import CommentItem from './commentitem'
+import MyAvatar from '../assets/img/avatar-7.jpg'
+import Avatar1 from '../assets/img/avatar-1.jpg'
+import Avatar2 from '../assets/img/avatar-2.jpg'
+import Avatar3 from '../assets/img/avatar-3.jpg'
+import Avatar4 from '../assets/img/avatar-4.jpg'
+import Avatar5 from '../assets/img/avatar-5.jpg'
+import Avatar6 from '../assets/img/avatar-6.jpg'
+import { timeline } from '../services/api'
+
+interface IComment {
+  owner: string
+  message: string
+  created: string
+}
+
+const avatars = [Avatar1, Avatar2, Avatar3, Avatar4, Avatar5, Avatar6]
 
 const { Text } = Typography
+const { TextArea } = Input
+
 const boxStyle: CSSProperties = {
   boxSizing: 'border-box',
   background: 'white',
@@ -26,18 +43,24 @@ const inputStyle: CSSProperties = {
   borderRadius: '1em',
   marginRight: '1em',
 }
-const mockcomment = [
-  { name: 'test', content: '!!!' },
-  { name: 'test1234', content: 'hello' },
-]
-const PostItem = ({ name, content }: IPost) => {
+
+const PostItem = ({ owner, message, picture, created }: IPost) => {
   const [likes, setLikes] = useState(0)
   const [action, setAction] = useState(null)
-  //use IPost instead of IComment
-  const [comments, setComments] = useState<IPost[]>([])
+  const [comments, setComments] = useState<IComment[]>([])
   const [hasComment, setHasComment] = useState(false)
+  const [mycomment, setMycomment] = useState('')
   const [loading, setLoading] = useState(true)
+  const [visible, setVisible] = useState(false)
 
+  const Photo = avatars[Math.floor(Math.random() * avatars.length)]
+
+  const handleWriteStatus = () => {
+    setVisible(true)
+  }
+  const onCancel = () => {
+    setVisible(false)
+  }
   const like = () => {
     if (action === 'liked') {
       setLikes(likes - 1)
@@ -50,7 +73,7 @@ const PostItem = ({ name, content }: IPost) => {
     console.log('Update like / unlike')
   }
   const reply = () => {
-    hasComment ? setHasComment(false) : fetchcomment('')
+    hasComment ? setHasComment(false) : setHasComment(true)
   }
 
   const actions = [
@@ -65,18 +88,40 @@ const PostItem = ({ name, content }: IPost) => {
 
   const fetchcomment = (postid: string) => {
     //TODO fetch comment of post
-    setComments(mockcomment)
-    setLoading(false)
-    setHasComment(true)
+    var payload = { postid: postid }
+    timeline.fetchComment(
+      payload,
+      ({ data }: any) => {
+        setComments(data)
+        setLoading(false)
+      },
+      (response: any) => {
+        console.log(response)
+      }
+    )
   }
-  const handleAddComment = (values: any) => {
-    // TODO add comment + show new comment
-    console.log(values)
+  const handleAddComment = () => {
+    //TODO add comment + show new comment
+    var payload = {
+      owner: localStorage.USERNAME,
+      message: mycomment,
+    }
+    timeline.addComment(
+      payload,
+      ({ data }: any) => {
+        setVisible(false)
+      },
+      (response: any) => {
+        console.log(response)
+      }
+    )
   }
   const handleUnfollow = () => {
-    //TODO
+    //TODO unfollow
   }
-
+  useEffect(() => {
+    fetchcomment('')
+  }, [])
   return (
     <div style={postStyle}>
       <Comment
@@ -93,46 +138,87 @@ const PostItem = ({ name, content }: IPost) => {
             placement="topCenter"
             arrow={true}
           >
-            <Text style={{ fontSize: '0.9rem', fontWeight: 'bold' }}>{name}</Text>
+            <Text style={{ fontSize: '0.9rem', fontWeight: 'bold' }}>{owner}</Text>
           </Dropdown>
         }
-        avatar={<Avatar icon={<UserOutlined />} />}
+        avatar={<Avatar icon={<img src={Photo} />} />}
         content={
           <div style={{ display: 'block' }}>
             <div>
-              <Text style={{ fontSize: '0.9rem' }}>{content}</Text>
+              <Text style={{ fontSize: '0.9rem' }}>{message}</Text>
             </div>
-            <div style={{ textAlign: 'center' }}>{/* TODO show image / video */}</div>
+            {picture.length != 0 ? (
+              <div style={{ textAlign: 'center', paddingTop: '1rem' }}>
+                <List
+                  dataSource={picture}
+                  grid={{ gutter: 16 }}
+                  renderItem={(item: string) => (
+                    <List.Item>
+                      <Image src={item} style={{ maxWidth: '8rem', maxHeight: '8rem' }} />
+                    </List.Item>
+                  )}
+                />
+              </div>
+            ) : (
+              <></>
+            )}
           </div>
         }
-        datetime={<span style={{ fontSize: '0.8rem' }}>{moment().fromNow()}</span>}
+        datetime={<span style={{ fontSize: '0.8rem' }}>{moment(created).fromNow()}</span>}
         children={
           hasComment && (
             <>
-              <List
-                itemLayout="horizontal"
-                size="small"
-                loading={loading}
-                dataSource={comments}
-                renderItem={(item: IPost) => <CommentItem name={item.name} content={item.content} />}
-              />
+              {comments.length != 0 && (
+                <List
+                  itemLayout="horizontal"
+                  size="small"
+                  loading={loading}
+                  dataSource={comments}
+                  renderItem={(item: IPost) => (
+                    <CommentItem owner={item.owner} message={item.message} created={item.created} />
+                  )}
+                />
+              )}
               <Comment
-                avatar={<Avatar icon={<UserOutlined />} />}
+                avatar={<Avatar icon={<img src={MyAvatar} />} />}
                 content={
                   <>
-                    <Form name="comment-form" onFinish={handleAddComment}>
+                    <Form name="comment-form" onFinish={handleAddComment} onClick={handleWriteStatus}>
                       <Form.Item name="content" style={{ marginBottom: 0 }}>
                         <div style={boxStyle}>
                           <Input placeholder="What's You Think" size="middle" style={inputStyle} />
-                          <Button type="primary" htmlType="submit">
-                            Submit
-                          </Button>
                         </div>
                       </Form.Item>
                     </Form>
                   </>
                 }
               />
+              <Modal
+                title={<div style={{ height: '1.5rem' }}></div>}
+                visible={visible}
+                onCancel={onCancel}
+                onOk={handleAddComment}
+                okText="Post"
+                bodyStyle={{ padding: '1rem' }}
+              >
+                <div style={{ display: 'flex', width: '100%' }}>
+                  <Avatar icon={<img src={MyAvatar} />} />
+                  <div style={{ width: '100%' }}>
+                    <Text style={{ fontSize: '0.9rem', fontWeight: 'bold', paddingLeft: '0.75rem' }}>
+                      {localStorage.USERNAME}
+                    </Text>
+                    <TextArea
+                      rows={2}
+                      placeholder="What's You Think"
+                      bordered={false}
+                      style={{ width: '100%' }}
+                      onChange={(e) => {
+                        setMycomment(e.target.value)
+                      }}
+                    />
+                  </div>
+                </div>
+              </Modal>
             </>
           )
         }
