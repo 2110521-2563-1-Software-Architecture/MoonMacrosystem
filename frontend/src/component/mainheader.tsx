@@ -62,6 +62,14 @@ const MainHeader = () => {
     setFollowingVisible(false)
     setFollowerVisible(false)
   }
+  const checkIsFollow = (val: string) => {
+    for (var i = 0; i < following.length; i++) {
+      if (following[i].username == val) {
+        return true
+      }
+    }
+    return false
+  }
   const fetchFriends = () => {
     //TODO fetch friend
     var payload = { username: localStorage.USERNAME }
@@ -141,7 +149,7 @@ const MainHeader = () => {
             itemLayout="horizontal"
             loading={loading}
             dataSource={following}
-            renderItem={(item: IFriend) => <UserListItem id={item.id} username={item.username} />}
+            renderItem={(item: IFriend) => <UserListItem id={item.id} username={item.username} isfollow={true} />}
           />
         </Modal>
         <Modal
@@ -158,7 +166,9 @@ const MainHeader = () => {
             itemLayout="horizontal"
             loading={loading}
             dataSource={follower}
-            renderItem={(item: IFriend) => <UserListItem id={item.id} username={item.username} />}
+            renderItem={(item: IFriend) => (
+              <UserListItem id={item.id} username={item.username} isfollow={checkIsFollow(item.username)} />
+            )}
           />
         </Modal>
       </div>

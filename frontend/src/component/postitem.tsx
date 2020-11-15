@@ -11,7 +11,7 @@ import Avatar4 from '../assets/img/avatar-4.jpg'
 import Avatar5 from '../assets/img/avatar-5.jpg'
 import Avatar6 from '../assets/img/avatar-6.jpg'
 import Avatar7 from '../assets/img/avatar-7.jpg'
-import { timeline } from '../services/api'
+import { friend, timeline } from '../services/api'
 
 interface IComment {
   owner: string
@@ -118,6 +118,14 @@ const PostItem = ({ owner, message, picture, created }: IPost) => {
   }
   const handleUnfollow = () => {
     //TODO unfollow
+    var payload = { owner: localStorage.USERNAME, username: owner }
+    friend.updateUnfollow(
+      payload,
+      ({ data }: any) => {
+        console.log(data)
+      },
+      (response: any) => {}
+    )
   }
   useEffect(() => {
     fetchcomment('')

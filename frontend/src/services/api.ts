@@ -1,4 +1,3 @@
-import { message } from 'antd'
 import axios, { AxiosInstance } from 'axios'
 import moment from 'moment'
 
@@ -38,6 +37,12 @@ export const timeline = {
           created: moment(),
         },
         { owner: 'ploy1234', message: 'hello', picture: [], created: moment() },
+        {
+          owner: 'ployyyyyyyyyy',
+          message: 'สวัสดี1234566',
+          picture: ['https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'],
+          created: moment(),
+        },
       ],
     })
   },
@@ -80,6 +85,29 @@ export const friend = {
           { id: '123766', username: 'velody' },
         ],
       },
+    })
+  },
+  updateFollow: (payload: { owner: string; username: string }, callback: any, onRejected: any) => {
+    console.log('unfollow called')
+    callback({
+      data: {},
+    })
+  },
+  updateUnfollow: (payload: { owner: string; username: string }, callback: any, onRejected: any) => {
+    console.log('follow called')
+    callback({
+      data: {},
+    })
+  },
+  search: (payload: { searchstr: string }, callback: any, onRejected: any) => {
+    callback({
+      data: [
+        { id: '123456', username: 'ploy' },
+        { id: '123777', username: 'pinn' },
+        { id: '123346', username: 'namkang' },
+        { id: '123766', username: 'velody' },
+        { id: '155766', username: 'test1234' },
+      ],
     })
   },
 }

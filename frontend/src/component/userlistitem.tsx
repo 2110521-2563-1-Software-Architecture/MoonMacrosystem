@@ -7,24 +7,42 @@ import Avatar4 from '../assets/img/avatar-4.jpg'
 import Avatar5 from '../assets/img/avatar-5.jpg'
 import Avatar6 from '../assets/img/avatar-6.jpg'
 import Avatar7 from '../assets/img/avatar-7.jpg'
-interface IFriend {
+import { friend } from '../services/api'
+interface IFriendItem {
   id: string
   username: string
+  isfollow: boolean
 }
 const avatars = [Avatar1, Avatar2, Avatar3, Avatar4, Avatar5, Avatar6, Avatar7]
 const { Text } = Typography
 
-const UserListItem = ({ id, username }: IFriend) => {
-  const [isFollow, setIsFollow] = useState(true)
+const UserListItem = ({ id, username, isfollow }: IFriendItem) => {
+  const [isFollow, setIsFollow] = useState(isfollow)
   const Photo = avatars[username.length % avatars.length]
 
   const handleOnClick = (e: any) => {
     if (isFollow) {
       setIsFollow(false)
       //TODO unfollow by id
+      var payload = { owner: localStorage.USERNAME, username: username }
+      friend.updateUnfollow(
+        payload,
+        ({ data }: any) => {
+          console.log(data)
+        },
+        (response: any) => {}
+      )
     } else {
       setIsFollow(true)
       //TODO follow by id
+      var payload = { owner: localStorage.USERNAME, username: username }
+      friend.updateFollow(
+        payload,
+        ({ data }: any) => {
+          console.log(data)
+        },
+        (response: any) => {}
+      )
     }
   }
   return (

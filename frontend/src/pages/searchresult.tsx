@@ -2,6 +2,7 @@ import React, { CSSProperties, useState, useEffect } from 'react'
 import { Layout, List, Typography } from 'antd'
 import MainHeader from '../component/mainheader'
 import UserListItem from '../component/userlistitem'
+import { friend } from '../services/api'
 
 interface IFriend {
   id: string
@@ -26,15 +27,49 @@ const inputStyle: CSSProperties = {
 const SearchResult = () => {
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState<IFriend[]>([])
+  const [following, setFollowing] = useState([])
+  const [follower, setFollower] = useState([])
 
   const searchStr = 'mockup'
-
+  const checkIsFollow = (val: string) => {
+    for (var i = 0; i < following.length; i++) {
+      if (following[i].username == val) {
+        return true
+      }
+    }
+    return false
+  }
+  const fetchFriends = () => {
+    //TODO fetch friend
+    var payload = { username: localStorage.USERNAME }
+    friend.fetchFollow(
+      payload,
+      ({ data }: any) => {
+        setFollower(data.followers)
+        setFollowing(data.followings)
+        setLoading(false)
+      },
+      (response: any) => {
+        console.log(response)
+      }
+    )
+  }
   const fetchResult = () => {
     //TODO fetch search result
-    setData(data1)
-    setLoading(false)
+    var payload = { searchstr: searchStr }
+    friend.search(
+      payload,
+      ({ data }: any) => {
+        setData(data)
+        setLoading(false)
+      },
+      (response: any) => {
+        console.log(response)
+      }
+    )
   }
   useEffect(() => {
+    fetchFriends()
     fetchResult()
   }, [])
   return (
@@ -51,7 +86,7 @@ const SearchResult = () => {
             dataSource={data}
             renderItem={(item: IFriend) => (
               <List.Item>
-                <UserListItem id={item.id} username={item.username} />
+                {<UserListItem id={item.id} username={item.username} isfollow={checkIsFollow(item.username)} />}
               </List.Item>
             )}
           />
