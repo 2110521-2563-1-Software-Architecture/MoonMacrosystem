@@ -7,18 +7,18 @@ import Avatar3 from '../assets/img/avatar-3.jpg'
 import Avatar4 from '../assets/img/avatar-4.jpg'
 import Avatar5 from '../assets/img/avatar-5.jpg'
 import Avatar6 from '../assets/img/avatar-6.jpg'
-
+import Avatar7 from '../assets/img/avatar-7.jpg'
 interface IComment {
   owner: string
   message: string
   created: string
 }
 
-const avatars = [Avatar1, Avatar2, Avatar3, Avatar4, Avatar5, Avatar6]
+const avatars = [Avatar1, Avatar2, Avatar3, Avatar4, Avatar5, Avatar6, Avatar7]
 
 const { Text } = Typography
 const CommentItem = ({ owner, message, created }: IComment) => {
-  const Photo = avatars[Math.floor(Math.random() * avatars.length)]
+  const Photo = avatars[owner.length % avatars.length]
 
   return (
     <Comment

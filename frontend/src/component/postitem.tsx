@@ -4,13 +4,13 @@ import moment from 'moment'
 import { LikeOutlined, LikeFilled } from '@ant-design/icons'
 import { IPost } from '../services/intf'
 import CommentItem from './commentitem'
-import MyAvatar from '../assets/img/avatar-7.jpg'
 import Avatar1 from '../assets/img/avatar-1.jpg'
 import Avatar2 from '../assets/img/avatar-2.jpg'
 import Avatar3 from '../assets/img/avatar-3.jpg'
 import Avatar4 from '../assets/img/avatar-4.jpg'
 import Avatar5 from '../assets/img/avatar-5.jpg'
 import Avatar6 from '../assets/img/avatar-6.jpg'
+import Avatar7 from '../assets/img/avatar-7.jpg'
 import { timeline } from '../services/api'
 
 interface IComment {
@@ -19,7 +19,7 @@ interface IComment {
   created: string
 }
 
-const avatars = [Avatar1, Avatar2, Avatar3, Avatar4, Avatar5, Avatar6]
+const avatars = [Avatar1, Avatar2, Avatar3, Avatar4, Avatar5, Avatar6, Avatar7]
 
 const { Text } = Typography
 const { TextArea } = Input
@@ -53,7 +53,7 @@ const PostItem = ({ owner, message, picture, created }: IPost) => {
   const [loading, setLoading] = useState(true)
   const [visible, setVisible] = useState(false)
 
-  const Photo = avatars[Math.floor(Math.random() * avatars.length)]
+  const Photo = avatars[owner.length % avatars.length]
 
   const handleWriteStatus = () => {
     setVisible(true)
@@ -180,7 +180,7 @@ const PostItem = ({ owner, message, picture, created }: IPost) => {
                 />
               )}
               <Comment
-                avatar={<Avatar icon={<img src={MyAvatar} />} />}
+                avatar={<Avatar icon={<img src={avatars[localStorage.USERNAME.length % avatars.length]} />} />}
                 content={
                   <>
                     <Form name="comment-form" onFinish={handleAddComment} onClick={handleWriteStatus}>
@@ -202,7 +202,7 @@ const PostItem = ({ owner, message, picture, created }: IPost) => {
                 bodyStyle={{ padding: '1rem' }}
               >
                 <div style={{ display: 'flex', width: '100%' }}>
-                  <Avatar icon={<img src={MyAvatar} />} />
+                  <Avatar icon={<img src={avatars[localStorage.USERNAME.length % avatars.length]} />} />
                   <div style={{ width: '100%' }}>
                     <Text style={{ fontSize: '0.9rem', fontWeight: 'bold', paddingLeft: '0.75rem' }}>
                       {localStorage.USERNAME}

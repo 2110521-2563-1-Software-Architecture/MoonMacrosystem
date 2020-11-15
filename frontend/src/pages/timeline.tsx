@@ -5,8 +5,16 @@ import upload from '../assets/img/upload.svg'
 import { IPost } from '../services/intf'
 import MainHeader from '../component/mainheader'
 import Modal from 'antd/lib/modal/Modal'
-import MyAvatar from '../assets/img/avatar-7.jpg'
 import { timeline } from '../services/api'
+import Avatar1 from '../assets/img/avatar-1.jpg'
+import Avatar2 from '../assets/img/avatar-2.jpg'
+import Avatar3 from '../assets/img/avatar-3.jpg'
+import Avatar4 from '../assets/img/avatar-4.jpg'
+import Avatar5 from '../assets/img/avatar-5.jpg'
+import Avatar6 from '../assets/img/avatar-6.jpg'
+import Avatar7 from '../assets/img/avatar-7.jpg'
+
+const avatars = [Avatar1, Avatar2, Avatar3, Avatar4, Avatar5, Avatar6, Avatar7]
 
 const { Content, Footer } = Layout
 const { TextArea } = Input
@@ -82,7 +90,7 @@ const Timeline = () => {
       <Content style={{ margin: '6rem 20% 0 20%' }}>
         <div style={postStyle}>
           <Comment
-            avatar={<Avatar icon={<img src={MyAvatar} />} />}
+            avatar={<Avatar icon={<img src={avatars[localStorage.USERNAME.length % avatars.length]} />} />}
             content={
               <>
                 <Form name="post-form" onFinish={handleAddPost} onClick={handleWriteStatus}>
@@ -117,7 +125,7 @@ const Timeline = () => {
             }
           >
             <div style={{ display: 'flex', width: '100%' }}>
-              <Avatar icon={<img src={MyAvatar} />} />
+              <Avatar icon={<img src={avatars[localStorage.USERNAME.length % avatars.length]} />} />
               <div style={{ width: '100%' }}>
                 <Text style={{ fontSize: '0.9rem', fontWeight: 'bold', paddingLeft: '0.75rem' }}>
                   {localStorage.USERNAME}
