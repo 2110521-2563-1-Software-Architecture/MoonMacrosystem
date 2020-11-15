@@ -1,20 +1,25 @@
 import React, { CSSProperties, useState, useEffect } from 'react'
 import { Layout, List, Avatar, Comment, Input, BackTop, Form, Button, Upload, Typography } from 'antd'
-import { UserOutlined } from '@ant-design/icons'
 import PostItem from '../component/postitem'
 import upload from '../assets/img/upload.svg'
 import { IPost } from '../services/intf'
 import MainHeader from '../component/mainheader'
 import Modal from 'antd/lib/modal/Modal'
+import { timeline } from '../services/api'
+import Avatar1 from '../assets/img/avatar-1.jpg'
+import Avatar2 from '../assets/img/avatar-2.jpg'
+import Avatar3 from '../assets/img/avatar-3.jpg'
+import Avatar4 from '../assets/img/avatar-4.jpg'
+import Avatar5 from '../assets/img/avatar-5.jpg'
+import Avatar6 from '../assets/img/avatar-6.jpg'
+import Avatar7 from '../assets/img/avatar-7.jpg'
+
+const avatars = [Avatar1, Avatar2, Avatar3, Avatar4, Avatar5, Avatar6, Avatar7]
 
 const { Content, Footer } = Layout
 const { TextArea } = Input
 const { Text } = Typography
 
-const data1 = [
-  { name: 'ploy', content: 'สวัสดี' },
-  { name: 'ploy1234', content: 'hello' },
-]
 const postStyle: CSSProperties = {
   margin: '0 1em 0em 1em',
   background: 'white',
@@ -33,21 +38,42 @@ const Timeline = () => {
   const [fileList, setFileList] = useState(null)
   const [visible, setVisible] = useState(false)
   const handleAddPost = () => {
-    //TODO
-    console.log(content)
-    //Upload file
-    // var formData = new FormData()
-    // if (fileList.length != 0) {
-    //   formData.append('picture', fileList)
-    // }
+    //TODO add post
+    //TODO Upload file
+    var formData = new FormData()
+    if (fileList) {
+      formData.append('picture', fileList)
+    }
+    var payload = {
+      owner: localStorage.USERNAME,
+      message: content,
+    }
+    timeline.addPost(
+      payload,
+      ({ data }: any) => {
+        setVisible(false)
+      },
+      (response: any) => {
+        console.log(response)
+      }
+    )
   }
   const handleUpload = (values: any) => {
-    console.log(values)
     setFileList(values.fileList)
   }
   const fetchTimeline = () => {
-    setData(data1)
-    setLoading(false)
+    //TODO fetch timeline
+    var payload = { username: localStorage.USERNAME }
+    timeline.fetchTimeline(
+      payload,
+      ({ data }: any) => {
+        setData(data)
+        setLoading(false)
+      },
+      (response: any) => {
+        console.log(response)
+      }
+    )
   }
   const handleWriteStatus = () => {
     setVisible(true)
@@ -64,7 +90,7 @@ const Timeline = () => {
       <Content style={{ margin: '6rem 20% 0 20%' }}>
         <div style={postStyle}>
           <Comment
-            avatar={<Avatar icon={<UserOutlined />} />}
+            avatar={<Avatar icon={<img src={avatars[localStorage.USERNAME.length % avatars.length]} />} />}
             content={
               <>
                 <Form name="post-form" onFinish={handleAddPost} onClick={handleWriteStatus}>
@@ -99,7 +125,7 @@ const Timeline = () => {
             }
           >
             <div style={{ display: 'flex', width: '100%' }}>
-              <Avatar icon={<UserOutlined />} />
+              <Avatar icon={<img src={avatars[localStorage.USERNAME.length % avatars.length]} />} />
               <div style={{ width: '100%' }}>
                 <Text style={{ fontSize: '0.9rem', fontWeight: 'bold', paddingLeft: '0.75rem' }}>
                   {localStorage.USERNAME}
@@ -122,7 +148,9 @@ const Timeline = () => {
           itemLayout="horizontal"
           loading={loading}
           dataSource={data}
-          renderItem={(item: IPost) => <PostItem name={item.name} content={item.content} />}
+          renderItem={(item: IPost) => (
+            <PostItem owner={item.owner} message={item.message} picture={item.picture} created={item.created} />
+          )}
         />
         <BackTop />
       </Content>
