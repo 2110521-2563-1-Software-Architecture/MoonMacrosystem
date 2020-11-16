@@ -25,6 +25,7 @@ export const timeline = {
     callback({
       data: [
         {
+          id: '12345678',
           owner: 'ploy',
           message: 'สวัสดี',
           picture: [
@@ -34,13 +35,23 @@ export const timeline = {
             'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
             'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
           ],
+          likes: ['123456', '123777'],
           created: moment(),
         },
-        { owner: 'ploy1234', message: 'hello', picture: [], created: moment() },
         {
+          id: '12345679',
+          owner: 'ploy1234',
+          message: 'hello',
+          picture: [],
+          likes: ['123456', '123777', '123346'],
+          created: moment(),
+        },
+        {
+          id: '12345680',
           owner: 'ployyyyyyyyyy',
           message: 'สวัสดี1234566',
           picture: ['https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'],
+          likes: [],
           created: moment(),
         },
       ],
@@ -66,6 +77,12 @@ export const timeline = {
   },
   addComment: (payload: { owner: string; message: string }, callback: any, onRejected: any) => {
     console.log('add comment', payload)
+    callback({
+      data: {},
+    })
+  },
+  updateLike: (payload: { owner: string; postid: string; isLike: boolean }, callback: any, onRejected: any) => {
+    console.log('update like/unlike', payload)
     callback({
       data: {},
     })

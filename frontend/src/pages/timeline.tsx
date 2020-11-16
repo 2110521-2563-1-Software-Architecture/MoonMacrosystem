@@ -149,7 +149,14 @@ const Timeline = () => {
           loading={loading}
           dataSource={data}
           renderItem={(item: IPost) => (
-            <PostItem owner={item.owner} message={item.message} picture={item.picture} created={item.created} />
+            <PostItem
+              id={item.id}
+              owner={item.owner}
+              message={item.message}
+              picture={item.picture}
+              created={item.created}
+              likes={item.likes}
+            />
           )}
         />
         <BackTop />

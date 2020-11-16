@@ -44,9 +44,10 @@ const inputStyle: CSSProperties = {
   marginRight: '1em',
 }
 
-const PostItem = ({ owner, message, picture, created }: IPost) => {
-  const [likes, setLikes] = useState(0)
-  const [action, setAction] = useState(null)
+const PostItem = ({ id, owner, message, picture, created, likes }: IPost) => {
+  const [likeN, setLikeN] = useState(likes.length)
+  //TODO set isLike==true when user in likes list
+  const [isLike, setIsLike] = useState(false)
   const [comments, setComments] = useState<IComment[]>([])
   const [hasComment, setHasComment] = useState(false)
   const [mycomment, setMycomment] = useState('')
@@ -62,15 +63,23 @@ const PostItem = ({ owner, message, picture, created }: IPost) => {
     setVisible(false)
   }
   const like = () => {
-    if (action === 'liked') {
-      setLikes(likes - 1)
-      setAction('null')
+    var payload
+    if (isLike) {
+      setLikeN(likeN - 1)
+      setIsLike(false)
+      payload = { owner: localStorage.USERNAME, postid: id, isLike: false }
     } else {
-      setLikes(likes + 1)
-      setAction('liked')
+      setLikeN(likeN + 1)
+      setIsLike(true)
+
+      payload = { owner: localStorage.USERNAME, postid: id, isLike: true }
     }
     // TODO Update like of post
-    console.log('Update like / unlike')
+    timeline.updateLike(
+      payload,
+      ({ data }: any) => {},
+      (response: any) => {}
+    )
   }
   const reply = () => {
     hasComment ? setHasComment(false) : setHasComment(true)
@@ -79,8 +88,8 @@ const PostItem = ({ owner, message, picture, created }: IPost) => {
   const actions = [
     <Tooltip key="comment-basic-like" title="Like">
       <span onClick={like}>
-        {createElement(action === 'liked' ? LikeFilled : LikeOutlined)}
-        <span className="comment-action">{likes}</span>
+        {createElement(isLike ? LikeFilled : LikeOutlined)}
+        <span className="comment-action">{likeN}</span>
       </span>
     </Tooltip>,
     <span onClick={reply}>Replies</span>,
