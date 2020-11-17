@@ -50,7 +50,7 @@ const MainHeader = () => {
   const onSearch = (values: String) => {
     console.log(values)
     //TODO redirect to searchresult page with searchstr
-    redirectTo(`/result`)
+    redirectTo(`/result?search=${values}`)
   }
   const showFollowing = () => {
     setFollowingVisible(true)

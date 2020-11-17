@@ -13,12 +13,8 @@ export default function App() {
       <Switch>
         <Route path="/" exact component={Login} />
         <Route path="/register" component={Register} />
-        <PrivateRoute isSignedIn={localStorage.getItem('ACCESS_TOKEN') == 'true'} path="/home" component={Timeline} />
-        <PrivateRoute
-          isSignedIn={localStorage.getItem('ACCESS_TOKEN') == 'true'}
-          path="/result"
-          component={SearchResult}
-        />
+        <PrivateRoute path="/home" component={Timeline} />
+        <PrivateRoute path="/result" component={SearchResult} />
       </Switch>
     </BrowserRouter>
   )

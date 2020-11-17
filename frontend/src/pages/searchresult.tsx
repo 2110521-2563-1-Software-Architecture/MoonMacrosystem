@@ -1,8 +1,9 @@
-import React, { CSSProperties, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Layout, List, Typography } from 'antd'
 import MainHeader from '../component/mainheader'
 import UserListItem from '../component/userlistitem'
 import { friend } from '../services/api'
+import { useLocation } from 'react-router-dom'
 
 interface IFriend {
   id: string
@@ -18,7 +19,8 @@ const SearchResult = () => {
   const [following, setFollowing] = useState([])
   const [follower, setFollower] = useState([])
 
-  const searchstr = 'mockup'
+  let search: any = useLocation().search
+  const searchstr = search.substring(search.indexOf('=') + 1)
 
   const checkIsFollow = (val: string) => {
     for (var i = 0; i < following.length; i++) {
