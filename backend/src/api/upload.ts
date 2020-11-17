@@ -37,4 +37,4 @@ export const uploadMiddleware = multer({
       cb(null, `moonmacrosystem/${Date.now().toString()}-${file.originalname}`)
     },
   }),
-}).array('upload', 1)
+}).array('data', 1)
