@@ -2,6 +2,8 @@ import * as express from 'express'
 import { Request, Response } from 'express'
 import { IRequest } from './types/types'
 import { login, register } from './api/user'
+import { addTweet, deleteTweet, getTweet } from './api/post'
+// import {}
 require('dotenv').config()
 
 const app = express()
@@ -46,6 +48,21 @@ app.post('/register', (req: IRequest<{ username: string; password: string; displ
     console.log(err)
     return
   })
+})
+
+app.post('/addTweet', (req, res) => {
+  addTweet(req, res)
+  return
+})
+
+app.post('/deleteTweet', (req, res) => {
+  deleteTweet(req, res)
+  return
+})
+
+app.post('/getTweet', (req, res) => {
+  getTweet(req, res)
+  return
 })
 
 app.listen(PORT, () => {
