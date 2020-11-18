@@ -25,7 +25,8 @@ export const timeline = {
     callback({
       data: [
         {
-          owner: 'ploy',
+          id: '12345678',
+          owner: 'user',
           message: 'สวัสดี',
           picture: [
             'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
@@ -34,13 +35,23 @@ export const timeline = {
             'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
             'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
           ],
+          likes: ['123456', '123777'],
           created: moment(),
         },
-        { owner: 'ploy1234', message: 'hello', picture: [], created: moment() },
         {
+          id: '12345679',
+          owner: 'ploy1234',
+          message: 'hello',
+          picture: [],
+          likes: ['123456', '123777', '123346'],
+          created: moment(),
+        },
+        {
+          id: '12345680',
           owner: 'ployyyyyyyyyy',
           message: 'สวัสดี1234566',
           picture: ['https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'],
+          likes: [],
           created: moment(),
         },
       ],
@@ -58,8 +69,14 @@ export const timeline = {
       ],
     })
   },
-  addPost: (payload: { owner: string; message: string }, callback: any, onRejected: any) => {
+  addPost: (payload: { owner: string; message: string; files: string[] }, callback: any, onRejected: any) => {
     console.log('add post', payload)
+    callback({
+      data: {},
+    })
+  },
+  deletePost: (payload: { owner: string; postid: string }, callback: any, onRejected: any) => {
+    console.log('delete post', payload)
     callback({
       data: {},
     })
@@ -70,6 +87,19 @@ export const timeline = {
       data: {},
     })
   },
+  updateLike: (payload: { owner: string; postid: string; isLike: boolean }, callback: any, onRejected: any) => {
+    console.log('update like/unlike', payload)
+    callback({
+      data: {},
+    })
+  },
+  //TODO upload files
+  // upload: (payload: FormData, callback: any, onRejected: any) => {
+  //   api
+  //     .post('/upload', payload)
+  //     .then(({ data }) => callback({ data }))
+  //     .catch(({ response }) => onRejected(response))
+  // },
 }
 export const friend = {
   fetchFollow: (payload: { username: string }, callback: any, onRejected: any) => {
