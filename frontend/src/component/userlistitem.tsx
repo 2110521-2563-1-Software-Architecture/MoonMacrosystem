@@ -1,24 +1,48 @@
 import React, { useState } from 'react'
-import { Avatar, Button, Comment, Typography } from 'antd'
-import { UserOutlined } from '@ant-design/icons'
-
-interface IFriend {
+import { Avatar, Button, Typography } from 'antd'
+import Avatar1 from '../assets/img/avatar-1.jpg'
+import Avatar2 from '../assets/img/avatar-2.jpg'
+import Avatar3 from '../assets/img/avatar-3.jpg'
+import Avatar4 from '../assets/img/avatar-4.jpg'
+import Avatar5 from '../assets/img/avatar-5.jpg'
+import Avatar6 from '../assets/img/avatar-6.jpg'
+import Avatar7 from '../assets/img/avatar-7.jpg'
+import { friend } from '../services/api'
+interface IFriendItem {
   id: string
-  name: string
+  username: string
+  isfollow: boolean
 }
-
+const avatars = [Avatar1, Avatar2, Avatar3, Avatar4, Avatar5, Avatar6, Avatar7]
 const { Text } = Typography
 
-const UserListItem = ({ id, name }: IFriend) => {
-  const [isFollow, setIsFollow] = useState(true)
+const UserListItem = ({ id, username, isfollow }: IFriendItem) => {
+  const [isFollow, setIsFollow] = useState(isfollow)
+  const Photo = avatars[username.length % avatars.length]
 
   const handleOnClick = (e: any) => {
     if (isFollow) {
       setIsFollow(false)
       //TODO unfollow by id
+      var payload = { owner: localStorage.USERNAME, username: username }
+      friend.updateUnfollow(
+        payload,
+        ({ data }: any) => {
+          console.log(data)
+        },
+        (response: any) => {}
+      )
     } else {
       setIsFollow(true)
       //TODO follow by id
+      var payload = { owner: localStorage.USERNAME, username: username }
+      friend.updateFollow(
+        payload,
+        ({ data }: any) => {
+          console.log(data)
+        },
+        (response: any) => {}
+      )
     }
   }
   return (
@@ -31,8 +55,8 @@ const UserListItem = ({ id, name }: IFriend) => {
       }}
     >
       <div>
-        <Avatar icon={<UserOutlined />} />
-        <Text style={{ fontSize: '0.9rem', fontWeight: 'bold', paddingLeft: '1rem' }}>{name}</Text>
+        <Avatar icon={<img src={Photo} />} />
+        <Text style={{ fontSize: '0.9rem', fontWeight: 'bold', paddingLeft: '1rem' }}>{username}</Text>
       </div>
       {isFollow ? (
         <Button type="default" onClick={handleOnClick}>

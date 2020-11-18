@@ -5,6 +5,7 @@ import { Request, Response } from 'express'
 import { IRequest } from './types/types'
 import { login, register } from './api/user'
 import { uploadMiddleware } from './api/upload'
+import { addTweet, deleteTweet, getTweet } from './api/post'
 
 const app = express()
 const cors = require('cors')
@@ -50,12 +51,28 @@ app.post('/register', (req: IRequest<{ username: string; password: string; displ
   })
 })
 
+
 app.post('/upload', uploadMiddleware, (req: Request & { files: any }, res: Response) => {
   const uploadData = {
     status: 200,
     files: req.files,
   }
   res.json(uploadData)
+})
+
+app.post('/addTweet', (req, res) => {
+  addTweet(req, res)
+  return
+})
+
+app.post('/deleteTweet', (req, res) => {
+  deleteTweet(req, res)
+  return
+})
+
+app.post('/getTweet', (req, res) => {
+  getTweet(req, res)
+  return
 })
 
 app.listen(PORT, () => {
