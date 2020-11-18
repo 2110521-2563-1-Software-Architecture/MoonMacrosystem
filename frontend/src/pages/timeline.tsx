@@ -38,15 +38,31 @@ const Timeline = () => {
   const [fileList, setFileList] = useState(null)
   const [visible, setVisible] = useState(false)
   const handleAddPost = () => {
-    //TODO add post
     //TODO Upload file
     var formData = new FormData()
-    if (fileList) {
-      formData.append('picture', fileList)
-    }
+    var files: string[] = []
+    // if (fileList) {
+    //   for (var i = 0; i < fileList.length; i++) {
+    //     console.log(fileList[i].originFileObj)
+    //     formData.append('data', fileList[i].originFileObj)
+
+    //     timeline.upload(
+    //       formData,
+    //       ({ data }: any) => {
+    //         console.log(data)
+    //         files.push(data.location)
+    //       },
+    //       (response: any) => {
+    //         console.log(response.status)
+    //       }
+    //     )
+    //   }
+    // }
+    //TODO add post
     var payload = {
       owner: localStorage.USERNAME,
       message: content,
+      files: files,
     }
     timeline.addPost(
       payload,

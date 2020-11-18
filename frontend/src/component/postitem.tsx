@@ -1,9 +1,24 @@
 import React, { useState, createElement, CSSProperties, useEffect } from 'react'
-import { Avatar, Comment, List, Tooltip, Typography, Form, Button, Input, Menu, Dropdown, Image, Modal } from 'antd'
+import {
+  Avatar,
+  Comment,
+  List,
+  Tooltip,
+  Typography,
+  Form,
+  Button,
+  Input,
+  Menu,
+  Dropdown,
+  Image,
+  Modal,
+  message as AntMessage,
+} from 'antd'
 import moment from 'moment'
 import { LikeOutlined, LikeFilled } from '@ant-design/icons'
 import { IPost } from '../services/intf'
 import CommentItem from './commentitem'
+import BinIcon from '../assets/img/bin.svg'
 import Avatar1 from '../assets/img/avatar-1.jpg'
 import Avatar2 from '../assets/img/avatar-2.jpg'
 import Avatar3 from '../assets/img/avatar-3.jpg'
@@ -37,6 +52,7 @@ const postStyle: CSSProperties = {
   background: 'white',
   padding: '0 1em',
   borderRadius: '1em',
+  display: 'flex',
 }
 const inputStyle: CSSProperties = {
   background: '#F2F2F2',
@@ -95,9 +111,9 @@ const PostItem = ({ id, owner, message, picture, created, likes }: IPost) => {
     <span onClick={reply}>Replies</span>,
   ]
 
-  const fetchcomment = (postid: string) => {
+  const fetchcomment = () => {
     //TODO fetch comment of post
-    var payload = { postid: postid }
+    var payload = { postid: id }
     timeline.fetchComment(
       payload,
       ({ data }: any) => {
@@ -136,8 +152,22 @@ const PostItem = ({ id, owner, message, picture, created, likes }: IPost) => {
       (response: any) => {}
     )
   }
+  const handleDelete = () => {
+    //TODO delete
+    var payload = { owner: localStorage.USERNAME, postid: id }
+    timeline.deletePost(
+      payload,
+      ({ data }: any) => {
+        AntMessage.success('Delete your post success!')
+      },
+      (response: any) => {
+        console.log(response)
+        AntMessage.error('Cannot delete this post. Please try again.')
+      }
+    )
+  }
   useEffect(() => {
-    fetchcomment('')
+    fetchcomment()
   }, [])
   return (
     <div style={postStyle}>
@@ -240,6 +270,11 @@ const PostItem = ({ id, owner, message, picture, created, likes }: IPost) => {
           )
         }
       />
+      {owner == localStorage.USERNAME && (
+        <span onClick={handleDelete}>
+          <img src={BinIcon} alt="bin" style={{ paddingTop: '1rem' }} />
+        </span>
+      )}
     </div>
   )
 }

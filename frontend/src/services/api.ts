@@ -26,7 +26,7 @@ export const timeline = {
       data: [
         {
           id: '12345678',
-          owner: 'ploy',
+          owner: 'user',
           message: 'สวัสดี',
           picture: [
             'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
@@ -69,8 +69,14 @@ export const timeline = {
       ],
     })
   },
-  addPost: (payload: { owner: string; message: string }, callback: any, onRejected: any) => {
+  addPost: (payload: { owner: string; message: string; files: string[] }, callback: any, onRejected: any) => {
     console.log('add post', payload)
+    callback({
+      data: {},
+    })
+  },
+  deletePost: (payload: { owner: string; postid: string }, callback: any, onRejected: any) => {
+    console.log('delete post', payload)
     callback({
       data: {},
     })
@@ -87,6 +93,13 @@ export const timeline = {
       data: {},
     })
   },
+  //TODO upload files
+  // upload: (payload: FormData, callback: any, onRejected: any) => {
+  //   api
+  //     .post('/upload', payload)
+  //     .then(({ data }) => callback({ data }))
+  //     .catch(({ response }) => onRejected(response))
+  // },
 }
 export const friend = {
   fetchFollow: (payload: { username: string }, callback: any, onRejected: any) => {
