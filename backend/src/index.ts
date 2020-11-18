@@ -1,10 +1,11 @@
+require('dotenv').config()
+
 import * as express from 'express'
 import { Request, Response } from 'express'
 import { IRequest } from './types/types'
 import { login, register } from './api/user'
+import { uploadMiddleware } from './api/upload'
 import { addTweet, deleteTweet, getTweet } from './api/post'
-// import {}
-require('dotenv').config()
 
 const app = express()
 const cors = require('cors')
@@ -48,6 +49,15 @@ app.post('/register', (req: IRequest<{ username: string; password: string; displ
     console.log(err)
     return
   })
+})
+
+
+app.post('/upload', uploadMiddleware, (req: Request & { files: any }, res: Response) => {
+  const uploadData = {
+    status: 200,
+    files: req.files,
+  }
+  res.json(uploadData)
 })
 
 app.post('/addTweet', (req, res) => {
