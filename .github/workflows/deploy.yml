@@ -33,6 +33,10 @@ jobs:
           envkey_DB_NAME: "database"
           envkey_DB_USER: ${{ secrets.DB_USER }}
           envkey_DB_PASS: ${{ secrets.DB_PASS }}
+          envkey_DO_SPACES_ENDPOINT: "fra1.digitaloceanspaces.com"
+          envkey_DO_SPACES_KEY: ${{ secrets.DO_SPACES_KEY }}
+          envkey_DO_SPACES_SECRET: ${{ secrets.DO_SPACES_SECRET }}
+          envkey_DO_SPACES_BUCKET: "icekangspaces"
           file_name: backend/.env
       - name: Publish to Github Packages Registry
         uses: elgohr/Publish-Docker-Github-Action@master
