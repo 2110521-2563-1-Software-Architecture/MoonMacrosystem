@@ -79,3 +79,28 @@ export async function addComment(req, res) {
     result.save()
   })
 }
+export async function deleteComment(req, res) {
+  const { owner, commentId, postId } = req.body
+  //
+
+  Comment.deleteOne({ _id: commentId }, function (err) {
+    if (!err) {
+      res.send({ status: 200, body: { message: 'found' } })
+      return
+    } else {
+      res.send({ status: 200, body: { message: 'Not found' } })
+      return
+    }
+  })
+
+  Post.findOne({ _id: postId }, async (err, result) => {
+    console.log(result)
+    const index = result.comments.indexOf(commentId)
+    console.log(index)
+    if (index > -1) {
+      result.comments.splice(index, 1)
+    }
+    console.log(result.comments)
+    await result.save()
+  })
+}
