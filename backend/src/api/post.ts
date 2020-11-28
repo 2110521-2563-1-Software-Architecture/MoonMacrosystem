@@ -1,6 +1,6 @@
 import * as crypto from 'crypto'
 import { Post, Comment } from '../models/post.model'
-import { User, UserPosts } from '../models/user.model'
+import { User, UserFollow, UserPosts } from '../models/user.model'
 import { IRequest } from '../types/types'
 import { Response } from 'express'
 
@@ -102,5 +102,15 @@ export async function deleteComment(req, res) {
     }
     console.log(result.comments)
     await result.save()
+  })
+}
+
+export async function likeTweet(req, res) {
+  const { owner, postId } = req.body
+  //
+  Post.findOne({ _id: postId }, async (err, result) => {
+    console.log(result)
+    result.likes.push(owner)
+    result.save()
   })
 }
