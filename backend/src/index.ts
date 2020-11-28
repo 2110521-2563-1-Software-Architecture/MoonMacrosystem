@@ -2,7 +2,7 @@ import * as express from 'express'
 import { Request, Response } from 'express'
 import { IRequest } from './types/types'
 import { login, register } from './api/user'
-import { addTweet, deleteTweet, getTweet } from './api/post'
+import { addTweet, deleteTweet, getTweet, addComment } from './api/post'
 // import {}
 require('dotenv').config()
 
@@ -62,6 +62,11 @@ app.post('/deleteTweet', (req, res) => {
 
 app.post('/getTweet', (req, res) => {
   getTweet(req, res)
+  return
+})
+
+app.post('/addComment', (req, res) => {
+  addComment(req, res)
   return
 })
 
