@@ -1,9 +1,24 @@
 import React, { useState, createElement, CSSProperties, useEffect } from 'react'
-import { Avatar, Comment, List, Tooltip, Typography, Form, Button, Input, Menu, Dropdown, Image, Modal } from 'antd'
+import {
+  Avatar,
+  Comment,
+  List,
+  Tooltip,
+  Typography,
+  Form,
+  Button,
+  Input,
+  Menu,
+  Dropdown,
+  Image,
+  Modal,
+  message as AntMessage,
+} from 'antd'
 import moment from 'moment'
 import { LikeOutlined, LikeFilled } from '@ant-design/icons'
 import { IPost } from '../services/intf'
 import CommentItem from './commentitem'
+import BinIcon from '../assets/img/bin.svg'
 import Avatar1 from '../assets/img/avatar-1.jpg'
 import Avatar2 from '../assets/img/avatar-2.jpg'
 import Avatar3 from '../assets/img/avatar-3.jpg'
@@ -37,6 +52,7 @@ const postStyle: CSSProperties = {
   background: 'white',
   padding: '0 1em',
   borderRadius: '1em',
+  display: 'flex',
 }
 const inputStyle: CSSProperties = {
   background: '#F2F2F2',
@@ -44,9 +60,10 @@ const inputStyle: CSSProperties = {
   marginRight: '1em',
 }
 
-const PostItem = ({ owner, message, picture, created }: IPost) => {
-  const [likes, setLikes] = useState(0)
-  const [action, setAction] = useState(null)
+const PostItem = ({ id, owner, message, picture, created, likes }: IPost) => {
+  const [likeN, setLikeN] = useState(likes.length)
+  //TODO set isLike==true when user in likes list
+  const [isLike, setIsLike] = useState(false)
   const [comments, setComments] = useState<IComment[]>([])
   const [hasComment, setHasComment] = useState(false)
   const [mycomment, setMycomment] = useState('')
@@ -62,15 +79,23 @@ const PostItem = ({ owner, message, picture, created }: IPost) => {
     setVisible(false)
   }
   const like = () => {
-    if (action === 'liked') {
-      setLikes(likes - 1)
-      setAction('null')
+    var payload
+    if (isLike) {
+      setLikeN(likeN - 1)
+      setIsLike(false)
+      payload = { owner: localStorage.USERNAME, postid: id, isLike: false }
     } else {
-      setLikes(likes + 1)
-      setAction('liked')
+      setLikeN(likeN + 1)
+      setIsLike(true)
+
+      payload = { owner: localStorage.USERNAME, postid: id, isLike: true }
     }
     // TODO Update like of post
-    console.log('Update like / unlike')
+    timeline.updateLike(
+      payload,
+      ({ data }: any) => {},
+      (response: any) => {}
+    )
   }
   const reply = () => {
     hasComment ? setHasComment(false) : setHasComment(true)
@@ -79,16 +104,16 @@ const PostItem = ({ owner, message, picture, created }: IPost) => {
   const actions = [
     <Tooltip key="comment-basic-like" title="Like">
       <span onClick={like}>
-        {createElement(action === 'liked' ? LikeFilled : LikeOutlined)}
-        <span className="comment-action">{likes}</span>
+        {createElement(isLike ? LikeFilled : LikeOutlined)}
+        <span className="comment-action">{likeN}</span>
       </span>
     </Tooltip>,
     <span onClick={reply}>Replies</span>,
   ]
 
-  const fetchcomment = (postid: string) => {
+  const fetchcomment = () => {
     //TODO fetch comment of post
-    var payload = { postid: postid }
+    var payload = { postid: id }
     timeline.fetchComment(
       payload,
       ({ data }: any) => {
@@ -127,8 +152,22 @@ const PostItem = ({ owner, message, picture, created }: IPost) => {
       (response: any) => {}
     )
   }
+  const handleDelete = () => {
+    //TODO delete
+    var payload = { owner: localStorage.USERNAME, postid: id }
+    timeline.deletePost(
+      payload,
+      ({ data }: any) => {
+        AntMessage.success('Delete your post success!')
+      },
+      (response: any) => {
+        console.log(response)
+        AntMessage.error('Cannot delete this post. Please try again.')
+      }
+    )
+  }
   useEffect(() => {
-    fetchcomment('')
+    fetchcomment()
   }, [])
   return (
     <div style={postStyle}>
@@ -231,6 +270,11 @@ const PostItem = ({ owner, message, picture, created }: IPost) => {
           )
         }
       />
+      {owner == localStorage.USERNAME && (
+        <span onClick={handleDelete}>
+          <img src={BinIcon} alt="bin" style={{ paddingTop: '1rem' }} />
+        </span>
+      )}
     </div>
   )
 }

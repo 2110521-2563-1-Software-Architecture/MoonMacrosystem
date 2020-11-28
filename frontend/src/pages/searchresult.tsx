@@ -1,8 +1,9 @@
-import React, { CSSProperties, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Layout, List, Typography } from 'antd'
 import MainHeader from '../component/mainheader'
 import UserListItem from '../component/userlistitem'
 import { friend } from '../services/api'
+import { useLocation } from 'react-router-dom'
 
 interface IFriend {
   id: string
@@ -12,25 +13,15 @@ interface IFriend {
 const { Content, Footer } = Layout
 const { Text } = Typography
 
-const data1 = [
-  { username: 'ploy', id: '123456' },
-  { username: 'pinn', id: '165485' },
-  { username: 'namkang', id: '456789' },
-  { username: 'velody', id: '458889' },
-]
-
-const inputStyle: CSSProperties = {
-  background: '#F2F2F2',
-  borderRadius: '1em',
-}
-
 const SearchResult = () => {
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState<IFriend[]>([])
   const [following, setFollowing] = useState([])
   const [follower, setFollower] = useState([])
 
-  const searchStr = 'mockup'
+  let search: any = useLocation().search
+  const searchstr = search.substring(search.indexOf('=') + 1)
+
   const checkIsFollow = (val: string) => {
     for (var i = 0; i < following.length; i++) {
       if (following[i].username == val) {
@@ -56,7 +47,7 @@ const SearchResult = () => {
   }
   const fetchResult = () => {
     //TODO fetch search result
-    var payload = { searchstr: searchStr }
+    var payload = { searchstr: searchstr }
     friend.search(
       payload,
       ({ data }: any) => {
@@ -77,7 +68,7 @@ const SearchResult = () => {
       <MainHeader />
       <Content style={{ margin: '6rem 20% 0 20%' }}>
         <Text style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>Search results : </Text>
-        <Text style={{ fontSize: '1.5rem', fontWeight: 'normal' }}>{searchStr}</Text>
+        <Text style={{ fontSize: '1.5rem', fontWeight: 'normal' }}>{searchstr}</Text>
 
         <div style={{ margin: '2.5rem 5% 3rem 5%' }}>
           <List
