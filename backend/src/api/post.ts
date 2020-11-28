@@ -114,3 +114,18 @@ export async function likeTweet(req, res) {
     result.save()
   })
 }
+
+export async function unlikeTweet(req, res) {
+  const { owner, postId } = req.body
+  //
+  Post.findOne({ _id: postId }, async (err, result) => {
+    console.log(result)
+    const index = result.comments.indexOf(owner)
+    console.log(index)
+    if (index > -1) {
+      result.likes.splice(index, 1)
+    }
+    console.log(result.likes)
+    await result.save()
+  })
+}

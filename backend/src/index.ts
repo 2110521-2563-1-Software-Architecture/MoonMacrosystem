@@ -90,6 +90,11 @@ app.post('/likeTweet', (req, res) => {
   return
 })
 
+app.post('/unlikeTweet', (req, res) => {
+  likeTweet(req, res)
+  return
+})
+
 app.listen(PORT, () => {
   console.log('server started at http://localhost:' + PORT)
 })
