@@ -5,14 +5,14 @@ import { IRequest } from '../types/types'
 import { Response } from 'express'
 
 export async function addTweet(req, res) {
-  const { user, massage } = req.body
+  const { userId, message } = req.body
   const created = Date.now
   const likes = []
   const comments = []
   const picture = 'InProgress'
   const videos = 'InProgress'
 
-  const tweet = await new Post({ owner: user, likes, comments, massage, picture, videos }).save()
+  const tweet = await new Post({ owner: userId, likes, comments, message, picture, videos }).save()
   console.log(tweet.owner)
 
   // return res.send({ status: 200, body: { message: 'ggg '});
@@ -38,7 +38,7 @@ export async function addTweet(req, res) {
 }
 
 export async function deleteTweet(req, res) {
-  const { user, tweetId } = req.body
+  const { userId, tweetId } = req.body
   Post.deleteOne({ _id: tweetId }, function (err) {
     if (!err) {
       res.send({ status: 200, body: { message: 'found' } })
@@ -49,7 +49,7 @@ export async function deleteTweet(req, res) {
     }
   })
 
-  UserPosts.findOne({ username: user }, async (err, result) => {
+  UserPosts.findOne({ username: userId }, async (err, result) => {
     const index = result.posts.indexOf(tweetId)
     if (index > -1) {
       result.posts.splice(index, 1)
@@ -60,18 +60,18 @@ export async function deleteTweet(req, res) {
 }
 
 export async function getTweet(req, res) {
-  const { user } = req.body
+  const { userId } = req.body
 
-  UserPosts.findOne({ username: user }, async (err, result) => {
+  UserPosts.findOne({ username: userId }, async (err, result) => {
     console.log(result.posts)
     res.send({ status: 200, body: { posts: result.posts } })
   })
 }
 
 export async function addComment(req, res) {
-  const { user, message, postId } = req.body
+  const { userId, message, postId } = req.body
   //
-  const comment = await new Comment({ user, message }).save()
+  const comment = await new Comment({ userId, message }).save()
   res.send({ status: 200, body: { message } })
   Post.findOne({ _id: postId }, async (err, result) => {
     console.log(result)
@@ -80,7 +80,7 @@ export async function addComment(req, res) {
   })
 }
 export async function deleteComment(req, res) {
-  const { user, commentId, postId } = req.body
+  const { userId, commentId, postId } = req.body
   //
 
   Comment.deleteOne({ _id: commentId }, function (err) {
@@ -106,21 +106,21 @@ export async function deleteComment(req, res) {
 }
 
 export async function likeTweet(req, res) {
-  const { user, postId } = req.body
+  const { userId, postId } = req.body
   //
   Post.findOne({ _id: postId }, async (err, result) => {
     console.log(result)
-    result.likes.push(user)
+    result.likes.push(userId)
     result.save()
   })
 }
 
 export async function unlikeTweet(req, res) {
-  const { user, postId } = req.body
+  const { userId, postId } = req.body
   //
   Post.findOne({ _id: postId }, async (err, result) => {
     console.log(result)
-    const index = result.comments.indexOf(user)
+    const index = result.comments.indexOf(userId)
     console.log(index)
     if (index > -1) {
       result.likes.splice(index, 1)
