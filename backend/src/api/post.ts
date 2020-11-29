@@ -5,14 +5,12 @@ import { IRequest } from '../types/types'
 import { Response } from 'express'
 
 export async function addTweet(req, res) {
-  const { userId, message } = req.body
+  const { userId, message, picture, video } = req.body
   const created = Date.now
   const likes = []
   const comments = []
-  const picture = 'InProgress'
-  const videos = 'InProgress'
 
-  const tweet = await new Post({ owner: userId, likes, comments, message, picture, videos }).save()
+  const tweet = await new Post({ owner: userId, likes, comments, message, picture, video }).save()
   console.log(tweet.owner)
 
   // return res.send({ status: 200, body: { message: 'ggg '});
