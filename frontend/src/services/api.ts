@@ -63,31 +63,60 @@ export const timeline = {
       ],
     })
   },
-  addPost: (payload: { owner: string; message: string; files: string }, callback: any, onRejected: any) => {
+  addPost: (
+    payload: { userId: string; message: string; picture: string; video: string },
+    callback: any,
+    onRejected: any
+  ) => {
     console.log('add post', payload)
     callback({
       data: {},
     })
+    // api
+    //   .post('/addTweet', payload)
+    //   .then(({ data }) => callback({ data }))
+    //   .catch(({ response }) => onRejected(response))
   },
-  deletePost: (payload: { owner: string; postid: string }, callback: any, onRejected: any) => {
+  deletePost: (payload: { userId: string; tweetId: string }, callback: any, onRejected: any) => {
     console.log('delete post', payload)
     callback({
       data: {},
     })
+    // api
+    //   .post('/deleteTweet', payload)
+    //   .then(({ data }) => callback({ data }))
+    //   .catch(({ response }) => onRejected(response))
   },
-  addComment: (payload: { owner: string; message: string }, callback: any, onRejected: any) => {
+  addComment: (payload: { userId: string; postId: string; message: string }, callback: any, onRejected: any) => {
     console.log('add comment', payload)
     callback({
       data: {},
     })
+    // api
+    //   .post('/addComment', payload)
+    //   .then(({ data }) => callback({ data }))
+    //   .catch(({ response }) => onRejected(response))
   },
-  updateLike: (payload: { owner: string; postid: string; isLike: boolean }, callback: any, onRejected: any) => {
-    console.log('update like/unlike', payload)
+  updateLike: (payload: { userId: string; tweetId: string }, callback: any, onRejected: any) => {
+    console.log('update like', payload)
     callback({
       data: {},
     })
+    // api
+    //   .post('/likeTweet', payload)
+    //   .then(({ data }) => callback({ data }))
+    //   .catch(({ response }) => onRejected(response))
   },
-  //TODO upload files
+  updateUnlike: (payload: { userId: string; tweetId: string }, callback: any, onRejected: any) => {
+    console.log('update unlike', payload)
+    callback({
+      data: {},
+    })
+    // api
+    //   .post('/unlikeTweet', payload)
+    //   .then(({ data }) => callback({ data }))
+    //   .catch(({ response }) => onRejected(response))
+  },
   upload: (payload: FormData, callback: any, onRejected: any) => {
     api
       .post('/upload', payload)
@@ -111,17 +140,25 @@ export const friend = {
       },
     })
   },
-  updateFollow: (payload: { owner: string; username: string }, callback: any, onRejected: any) => {
-    console.log('unfollow called')
+  updateFollow: (payload: { userId: string; targetId: string }, callback: any, onRejected: any) => {
+    console.log('unfollow', payload)
     callback({
       data: {},
     })
+    // api
+    //   .post('/follow', payload)
+    //   .then(({ data }) => callback({ data }))
+    //   .catch(({ response }) => onRejected(response))
   },
-  updateUnfollow: (payload: { owner: string; username: string }, callback: any, onRejected: any) => {
-    console.log('follow called')
+  updateUnfollow: (payload: { userId: string; targetId: string }, callback: any, onRejected: any) => {
+    console.log('follow', payload)
     callback({
       data: {},
     })
+    // api
+    //   .post('/unfollow', payload)
+    //   .then(({ data }) => callback({ data }))
+    //   .catch(({ response }) => onRejected(response))
   },
   search: (payload: { searchstr: string }, callback: any, onRejected: any) => {
     callback({

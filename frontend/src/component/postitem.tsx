@@ -83,19 +83,24 @@ const PostItem = ({ id, owner, message, picture, created, likes }: IPost) => {
     if (isLike) {
       setLikeN(likeN - 1)
       setIsLike(false)
-      payload = { owner: localStorage.USERNAME, postid: id, isLike: false }
+      payload = { userId: localStorage.USERID, tweetId: id }
+      timeline.updateLike(
+        payload,
+        ({ data }: any) => {},
+        (response: any) => {}
+      )
     } else {
       setLikeN(likeN + 1)
       setIsLike(true)
 
-      payload = { owner: localStorage.USERNAME, postid: id, isLike: true }
+      payload = { userId: localStorage.USERID, tweetId: id }
+      timeline.updateUnlike(
+        payload,
+        ({ data }: any) => {},
+        (response: any) => {}
+      )
     }
     // TODO Update like of post
-    timeline.updateLike(
-      payload,
-      ({ data }: any) => {},
-      (response: any) => {}
-    )
   }
   const reply = () => {
     hasComment ? setHasComment(false) : setHasComment(true)
@@ -128,7 +133,8 @@ const PostItem = ({ id, owner, message, picture, created, likes }: IPost) => {
   const handleAddComment = () => {
     //TODO add comment + show new comment
     var payload = {
-      owner: localStorage.USERNAME,
+      userId: localStorage.USERID,
+      postId: id,
       message: mycomment,
     }
     timeline.addComment(
@@ -143,7 +149,7 @@ const PostItem = ({ id, owner, message, picture, created, likes }: IPost) => {
   }
   const handleUnfollow = () => {
     //TODO unfollow
-    var payload = { owner: localStorage.USERNAME, username: owner }
+    var payload = { userId: localStorage.USERID, targetId: owner }
     friend.updateUnfollow(
       payload,
       ({ data }: any) => {
@@ -153,8 +159,8 @@ const PostItem = ({ id, owner, message, picture, created, likes }: IPost) => {
     )
   }
   const handleDelete = () => {
-    //TODO delete
-    var payload = { owner: localStorage.USERNAME, postid: id }
+    //TODO delete post
+    var payload = { userId: localStorage.USERID, tweetId: id }
     timeline.deletePost(
       payload,
       ({ data }: any) => {

@@ -51,6 +51,7 @@ const Login = () => {
         if (data.status == '200') {
           localStorage.setItem('REMEMBER', values.remember)
           localStorage.setItem('USERNAME', data.body.username)
+          localStorage.setItem('USERID', data.body.userId)
           localStorage.setItem('ACCESS_TOKEN', 'true')
           message.success('Login success!')
           redirectTo('/home')

@@ -46,12 +46,14 @@ const Timeline = () => {
       timeline.upload(
         formData,
         ({ data }: any) => {
-          console.log(data)
           var filelocation = data.files[0].location
+          //TODO handle type of file picture/video
+          console.log('filetype', data.files[0].mimetype)
           var payload = {
-            owner: localStorage.USERNAME,
+            userId: localStorage.USERID,
             message: content,
-            files: filelocation,
+            picture: filelocation,
+            video: '',
           }
           timeline.addPost(
             payload,
@@ -67,25 +69,27 @@ const Timeline = () => {
           console.log(response.status)
         }
       )
-    }
-
-    //TODO add post
-    var payload = {
-      owner: localStorage.USERNAME,
-      message: content,
-      files: '',
-    }
-    timeline.addPost(
-      payload,
-      ({ data }: any) => {
-        setVisible(false)
-      },
-      (response: any) => {
-        console.log(response)
+    } else {
+      //TODO add post
+      var payload = {
+        userId: localStorage.USERID,
+        message: content,
+        picture: '',
+        video: '',
       }
-    )
+      timeline.addPost(
+        payload,
+        ({ data }: any) => {
+          setVisible(false)
+        },
+        (response: any) => {
+          console.log(response)
+        }
+      )
+    }
   }
   const handleUpload = (values: any) => {
+    console.log('valueeeeeeeeeeeeeeee', values)
     setFileList(values.fileList)
   }
   const fetchTimeline = () => {
@@ -140,8 +144,8 @@ const Timeline = () => {
             footer={
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <div style={{ display: 'flex' }}>
-                  <img src={upload} alt="Tumrai" style={{ maxHeight: '100%', maxWidth: '100%' }} />
-                  <Upload listType="picture" onChange={handleUpload}>
+                  <Upload listType="picture" onChange={handleUpload} accept=".png,.jpg,.jpeg,.mp4,.gif">
+                    <img src={upload} alt="Tumrai" style={{ maxHeight: '100%', maxWidth: '100%' }} />
                     <Button type="link">Upload picture / video</Button>
                   </Upload>
                 </div>
