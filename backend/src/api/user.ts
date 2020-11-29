@@ -50,17 +50,19 @@ export async function register(
 export async function login(req: IRequest<{ username: string; password: string }>, res: Response) {
   console.log(req.body)
   const { username, password } = req.body
-  UserSecret.find({ username: username }, async (err, result) => {
+  UserSecret.findOne({ username: username }, async (err, result) => {
     console.log('error', err, result)
     if (err) {
       console.log(err)
       res.send({ status: 400, body: { message: 'Bad Request', err } })
       return
     } else {
-      const { username, hash, salt } = result[0]
+      const { username, hash, salt } = result
       const valid = await verify(password, hash, salt)
       if (valid) {
-        res.send({ status: 200, body: { message: 'Login Successful!', username: username } })
+        const user = User.findOne({ username: username })
+
+        res.send({ status: 200, body: { message: 'Login Successful!', username: username, userId: (await user)._id } })
         return
       } else {
         res.send({ status: 400, body: { message: 'Login Failed! Password is invalid', username: username } })
