@@ -1,5 +1,5 @@
 import * as crypto from 'crypto'
-import { UserSecret, User } from '../models/user.model'
+import { UserSecret, User, UserFollow } from '../models/user.model'
 import { IRequest } from '../types/types'
 import { Response } from 'express'
 
@@ -68,4 +68,31 @@ export async function login(req: IRequest<{ username: string; password: string }
       }
     }
   })
+}
+
+export async function follow(req, res) {
+  const { userId, targetId } = req.body
+  console.log('xxxxx')
+  UserFollow.findOne({ username: userId }, async (err, result) => {
+    console.log(result)
+    if (result == null) {
+      await new UserFollow({ username: userId, followers: [], followings: [targetId] }).save()
+      console.log('yyyyy')
+    } else {
+      result.followings.push(targetId)
+      result.save()
+    }
+  })
+
+  UserFollow.findOne({ username: targetId }, async (err, result) => {
+    if (result == null) {
+      await new UserFollow({ username: targetId, followers: [userId], followings: [] }).save()
+      console.log('zzzz')
+    } else {
+      result.followers.push(userId)
+      result.save()
+    }
+  })
+  res.send({ status: 200, body: { message: 'Followwwwwwww' } })
+  return
 }
