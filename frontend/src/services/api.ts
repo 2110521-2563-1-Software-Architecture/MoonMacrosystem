@@ -28,13 +28,7 @@ export const timeline = {
           id: '12345678',
           owner: 'user',
           message: 'สวัสดี',
-          picture: [
-            'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-            'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-            'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-            'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-            'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-          ],
+          picture: ['https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'],
           likes: ['123456', '123777'],
           created: moment(),
         },
@@ -69,7 +63,7 @@ export const timeline = {
       ],
     })
   },
-  addPost: (payload: { owner: string; message: string; files: string[] }, callback: any, onRejected: any) => {
+  addPost: (payload: { owner: string; message: string; files: string }, callback: any, onRejected: any) => {
     console.log('add post', payload)
     callback({
       data: {},
@@ -94,12 +88,12 @@ export const timeline = {
     })
   },
   //TODO upload files
-  // upload: (payload: FormData, callback: any, onRejected: any) => {
-  //   api
-  //     .post('/upload', payload)
-  //     .then(({ data }) => callback({ data }))
-  //     .catch(({ response }) => onRejected(response))
-  // },
+  upload: (payload: FormData, callback: any, onRejected: any) => {
+    api
+      .post('/upload', payload)
+      .then(({ data }) => callback({ data }))
+      .catch(({ response }) => onRejected(response))
+  },
 }
 export const friend = {
   fetchFollow: (payload: { username: string }, callback: any, onRejected: any) => {

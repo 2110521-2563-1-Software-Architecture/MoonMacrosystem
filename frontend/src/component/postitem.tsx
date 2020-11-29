@@ -195,16 +195,8 @@ const PostItem = ({ id, owner, message, picture, created, likes }: IPost) => {
               <Text style={{ fontSize: '0.9rem' }}>{message}</Text>
             </div>
             {picture.length != 0 ? (
-              <div style={{ textAlign: 'center', paddingTop: '1rem' }}>
-                <List
-                  dataSource={picture}
-                  grid={{ gutter: 16 }}
-                  renderItem={(item: string) => (
-                    <List.Item>
-                      <Image src={item} style={{ maxWidth: '8rem', maxHeight: '8rem' }} />
-                    </List.Item>
-                  )}
-                />
+              <div style={{ paddingTop: '1rem' }}>
+                <Image src={picture[0]} style={{ maxWidth: '10rem', maxHeight: '10rem' }} />
               </div>
             ) : (
               <></>
