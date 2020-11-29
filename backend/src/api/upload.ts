@@ -37,4 +37,7 @@ export const uploadMiddleware = multer({
       cb(null, `moonmacrosystem/${Date.now().toString()}-${file.originalname}`)
     },
   }),
+  limits: {
+    fileSize: 1024 * 1024 * 5 // we are allowing only 5 MB files
+  }
 }).array('data', 1)
