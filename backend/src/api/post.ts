@@ -127,3 +127,20 @@ export async function unlikeTweet(req, res) {
     await result.save()
   })
 }
+
+export async function getNewFeed(req, res) {
+  const { userId } = req.body
+  const followings = await (await UserFollow.findOne({ username: userId })).followings
+
+  console.log(followings)
+
+  const test = Post.find().sort({ _id: 1 }).limit(10)
+  console.log(test)
+  const tweets = []
+
+  for (let i = 0; i < followings.length; i++) {
+    console.log(test[i])
+  }
+  res.send({ status: 200, body: { message: 'found' } })
+  return
+}

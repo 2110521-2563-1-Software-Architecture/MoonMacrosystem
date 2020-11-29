@@ -98,3 +98,18 @@ export async function follow(req, res) {
   res.send({ status: 200, body: { message: 'Followwwwwwww' } })
   return
 }
+
+// export async function unollow(req, res) {
+//   const { userId, targetId } = req.body
+//   console.log('xxxxx')
+//   UserFollow.findOne({ username: userId }, async (err, result) => {
+//     console.log(result)
+//     if (result == null) {
+//       await new UserFollow({ username: userId, followers: [], followings: [targetId] }).save()
+//       console.log('yyyyy')
+//     } else {
+//       result.followings.push(targetId)
+//       result.save()
+//     }
+//   })
+// }

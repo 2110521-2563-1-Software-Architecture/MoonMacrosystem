@@ -4,7 +4,7 @@ import * as express from 'express'
 import { Request, Response } from 'express'
 import { IRequest } from './types/types'
 import { login, register, follow } from './api/user'
-import { addTweet, deleteTweet, getTweet, addComment, deleteComment, likeTweet } from './api/post'
+import { addTweet, deleteTweet, getTweet, addComment, deleteComment, likeTweet, getNewFeed } from './api/post'
 
 import { uploadMiddleware } from './api/upload'
 
@@ -97,6 +97,11 @@ app.post('/unlikeTweet', (req, res) => {
 
 app.post('/follow', (req, res) => {
   follow(req, res)
+  return
+})
+
+app.post('/getNewFeed', (req, res) => {
+  getNewFeed(req, res)
   return
 })
 
