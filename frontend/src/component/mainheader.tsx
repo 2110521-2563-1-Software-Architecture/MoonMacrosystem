@@ -71,7 +71,7 @@ const MainHeader = () => {
   }
   const fetchFriends = () => {
     //TODO fetch friend
-    var payload = { username: localStorage.USERNAME }
+    var payload = { userId: localStorage.USERID }
     friend.fetchFollow(
       payload,
       ({ data }: any) => {

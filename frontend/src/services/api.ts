@@ -21,14 +21,15 @@ export const authentication = {
   },
 }
 export const timeline = {
-  fetchTimeline: (payload: { username: string }, callback: any, onRejected: any) => {
+  fetchTimeline: (payload: { userId: string }, callback: any, onRejected: any) => {
     callback({
       data: [
         {
-          id: '12345678',
+          id: '5f7e0144ae71765de09dda5d',
           owner: 'user',
           message: 'สวัสดี',
-          picture: ['https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'],
+          picture: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+          video: '',
           likes: ['123456', '123777'],
           created: moment(),
         },
@@ -36,7 +37,9 @@ export const timeline = {
           id: '12345679',
           owner: 'ploy1234',
           message: 'hello',
-          picture: [],
+          picture: '',
+          video:
+            'https://icekangspaces.fra1.digitaloceanspaces.com/moonmacrosystem/1606669224134-file_example_MP4_480_1_5MG.mp4',
           likes: ['123456', '123777', '123346'],
           created: moment(),
         },
@@ -44,14 +47,15 @@ export const timeline = {
           id: '12345680',
           owner: 'ployyyyyyyyyy',
           message: 'สวัสดี1234566',
-          picture: ['https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'],
+          picture: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+          video: '',
           likes: [],
           created: moment(),
         },
       ],
     })
   },
-  fetchComment: (payload: { postid: string }, callback: any, onRejected: any) => {
+  fetchComment: (payload: { tweetId: string }, callback: any, onRejected: any) => {
     callback({
       data: [
         {
@@ -125,7 +129,7 @@ export const timeline = {
   },
 }
 export const friend = {
-  fetchFollow: (payload: { username: string }, callback: any, onRejected: any) => {
+  fetchFollow: (payload: { userId: string }, callback: any, onRejected: any) => {
     callback({
       data: {
         followings: [

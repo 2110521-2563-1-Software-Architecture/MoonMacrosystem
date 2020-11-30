@@ -11,8 +11,8 @@ export interface IPost {
   id: string
   owner: string
   message: string
-  picture: string[]
-  // video: string[]
+  picture: string
+  video: string
   likes: string[]
   // comments: string[]
   created: string

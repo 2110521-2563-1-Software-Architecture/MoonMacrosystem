@@ -47,14 +47,23 @@ const Timeline = () => {
         formData,
         ({ data }: any) => {
           var filelocation = data.files[0].location
-          //TODO handle type of file picture/video
-          console.log('filetype', data.files[0].mimetype)
-          var payload = {
-            userId: localStorage.USERID,
-            message: content,
-            picture: filelocation,
-            video: '',
+          var payload
+          if (data.files[0].mimetype.indexOf('image') == 0) {
+            payload = {
+              userId: localStorage.USERID,
+              message: content,
+              picture: filelocation,
+              video: '',
+            }
+          } else {
+            payload = {
+              userId: localStorage.USERID,
+              message: content,
+              picture: '',
+              video: filelocation,
+            }
           }
+          console.log(payload)
           timeline.addPost(
             payload,
             ({ data }: any) => {
@@ -89,12 +98,11 @@ const Timeline = () => {
     }
   }
   const handleUpload = (values: any) => {
-    console.log('valueeeeeeeeeeeeeeee', values)
     setFileList(values.fileList)
   }
   const fetchTimeline = () => {
     //TODO fetch timeline
-    var payload = { username: localStorage.USERNAME }
+    var payload = { userId: localStorage.USERID }
     timeline.fetchTimeline(
       payload,
       ({ data }: any) => {
@@ -144,7 +152,7 @@ const Timeline = () => {
             footer={
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <div style={{ display: 'flex' }}>
-                  <Upload listType="picture" onChange={handleUpload} accept=".png,.jpg,.jpeg,.mp4,.gif">
+                  <Upload listType="picture" onChange={handleUpload} accept=".png,.jpg,.jpeg,.mp4">
                     <img src={upload} alt="Tumrai" style={{ maxHeight: '100%', maxWidth: '100%' }} />
                     <Button type="link">Upload picture / video</Button>
                   </Upload>
@@ -185,6 +193,7 @@ const Timeline = () => {
               owner={item.owner}
               message={item.message}
               picture={item.picture}
+              video={item.video}
               created={item.created}
               likes={item.likes}
             />

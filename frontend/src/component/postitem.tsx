@@ -60,7 +60,7 @@ const inputStyle: CSSProperties = {
   marginRight: '1em',
 }
 
-const PostItem = ({ id, owner, message, picture, created, likes }: IPost) => {
+const PostItem = ({ id, owner, message, picture, video, created, likes }: IPost) => {
   const [likeN, setLikeN] = useState(likes.length)
   //TODO set isLike==true when user in likes list
   const [isLike, setIsLike] = useState(false)
@@ -81,26 +81,27 @@ const PostItem = ({ id, owner, message, picture, created, likes }: IPost) => {
   const like = () => {
     var payload
     if (isLike) {
+      // TODO Update unlike of post
       setLikeN(likeN - 1)
       setIsLike(false)
-      payload = { userId: localStorage.USERID, tweetId: id }
-      timeline.updateLike(
-        payload,
-        ({ data }: any) => {},
-        (response: any) => {}
-      )
-    } else {
-      setLikeN(likeN + 1)
-      setIsLike(true)
-
       payload = { userId: localStorage.USERID, tweetId: id }
       timeline.updateUnlike(
         payload,
         ({ data }: any) => {},
         (response: any) => {}
       )
+    } else {
+      // TODO Update like of post
+      setLikeN(likeN + 1)
+      setIsLike(true)
+
+      payload = { userId: localStorage.USERID, tweetId: id }
+      timeline.updateLike(
+        payload,
+        ({ data }: any) => {},
+        (response: any) => {}
+      )
     }
-    // TODO Update like of post
   }
   const reply = () => {
     hasComment ? setHasComment(false) : setHasComment(true)
@@ -118,7 +119,7 @@ const PostItem = ({ id, owner, message, picture, created, likes }: IPost) => {
 
   const fetchcomment = () => {
     //TODO fetch comment of post
-    var payload = { postid: id }
+    var payload = { tweetId: id }
     timeline.fetchComment(
       payload,
       ({ data }: any) => {
@@ -200,9 +201,18 @@ const PostItem = ({ id, owner, message, picture, created, likes }: IPost) => {
             <div>
               <Text style={{ fontSize: '0.9rem' }}>{message}</Text>
             </div>
-            {picture.length != 0 ? (
+            {picture ? (
               <div style={{ paddingTop: '1rem' }}>
-                <Image src={picture[0]} style={{ maxWidth: '10rem', maxHeight: '10rem' }} />
+                <Image src={picture} style={{ maxWidth: '10rem', maxHeight: '10rem' }} />
+              </div>
+            ) : (
+              <></>
+            )}
+            {video ? (
+              <div>
+                <video width="320" height="200" controls>
+                  <source src={video} type="video/mp4" />
+                </video>
               </div>
             ) : (
               <></>
