@@ -24,7 +24,7 @@ const UserListItem = ({ id, username, isfollow }: IFriendItem) => {
     if (isFollow) {
       setIsFollow(false)
       //TODO unfollow by id
-      var payload = { owner: localStorage.USERNAME, username: username }
+      var payload = { userId: localStorage.USERID, targetId: id }
       friend.updateUnfollow(
         payload,
         ({ data }: any) => {
@@ -35,7 +35,7 @@ const UserListItem = ({ id, username, isfollow }: IFriendItem) => {
     } else {
       setIsFollow(true)
       //TODO follow by id
-      var payload = { owner: localStorage.USERNAME, username: username }
+      var payload = { userId: localStorage.USERID, targetId: id }
       friend.updateFollow(
         payload,
         ({ data }: any) => {
