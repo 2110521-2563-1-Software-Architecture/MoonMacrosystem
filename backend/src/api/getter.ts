@@ -128,8 +128,14 @@ export async function getComments(req, res) {
   console.log(ggg)
 
   const comments = await Comment.find({ _id: { $in: ggg } })
+  const users = []
 
-  return res.send({ status: 200, body: { comments: comments } })
+  for (const v of comments) {
+    console.log(v.owner)
+    const u = await User.findOne({ _id: v.owner })
+    users.push(u)
+  }
+  return res.send({ status: 200, body: { comments: comments, users: users } })
 }
 
 export async function search(req, res) {
