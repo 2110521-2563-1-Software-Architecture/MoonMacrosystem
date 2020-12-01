@@ -70,7 +70,15 @@ export async function getNewFeed(req, res) {
 export async function getComments(req, res) {
   const { tweetId } = req.body
   const commentsId = await Post.findOne({ _id: tweetId })
-  const comments = await Comment.find({ owner: { $in: commentsId } })
+  let ggg
+  ggg = []
+
+  if (commentsId) {
+    ggg = commentsId.comments
+  }
+  console.log(ggg)
+
+  const comments = await Comment.find({ _id: { $in: ggg } })
 
   return res.send({ status: 200, body: { comments: comments } })
 }
