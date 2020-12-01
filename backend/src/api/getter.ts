@@ -63,8 +63,13 @@ export async function getNewFeed(req, res) {
     .limit(limit)
   console.log(result)
   console.log('yyyyy')
+  const users = []
+  for (const v of result) {
+    const user = (await User.findOne({ _id: v._id })).username
+    users.push(users)
+  }
 
-  return res.send({ status: 200, body: { tweets: result } })
+  return res.send({ status: 200, body: { tweets: result, users: users } })
 }
 
 export async function getComments(req, res) {
