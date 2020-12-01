@@ -86,15 +86,7 @@ export async function deleteComment(req, res) {
   const { userId, commentId, tweetId } = req.body
   //
 
-  Comment.deleteOne({ _id: commentId }, function (err) {
-    if (!err) {
-      res.send({ status: 200, body: { message: 'found' } })
-      return
-    } else {
-      res.send({ status: 200, body: { message: 'Not found' } })
-      return
-    }
-  })
+  Comment.deleteOne({ _id: commentId })
 
   Post.findOne({ _id: tweetId }, async (err, result) => {
     console.log(result)
