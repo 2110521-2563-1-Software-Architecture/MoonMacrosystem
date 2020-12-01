@@ -14,6 +14,12 @@ import Avatar5 from '../assets/img/avatar-5.jpg'
 import Avatar6 from '../assets/img/avatar-6.jpg'
 import Avatar7 from '../assets/img/avatar-7.jpg'
 
+interface IUserShow {
+  _id: string
+  username: string
+  displayName: string
+}
+
 const avatars = [Avatar1, Avatar2, Avatar3, Avatar4, Avatar5, Avatar6, Avatar7]
 
 const { Content, Footer } = Layout
@@ -34,11 +40,11 @@ const inputStyle: CSSProperties = {
 const Timeline = () => {
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState<IPost[]>([])
+  const [users, setUsers] = useState<IUserShow[]>([])
   const [content, setContent] = useState('')
   const [fileList, setFileList] = useState(null)
   const [visible, setVisible] = useState(false)
   const handleAddPost = () => {
-    //TODO Upload file
     var formData = new FormData()
     if (fileList) {
       formData.append('data', fileList[0].originFileObj)
@@ -63,11 +69,11 @@ const Timeline = () => {
               video: filelocation,
             }
           }
-          console.log(payload)
           timeline.addPost(
             payload,
             ({ data }: any) => {
               setVisible(false)
+              fetchTimeline(0)
             },
             (response: any) => {
               console.log(response)
@@ -79,7 +85,6 @@ const Timeline = () => {
         }
       )
     } else {
-      //TODO add post
       var payload = {
         userId: localStorage.USERID,
         message: content,
@@ -89,10 +94,11 @@ const Timeline = () => {
       timeline.addPost(
         payload,
         ({ data }: any) => {
+          console.log(data)
           setVisible(false)
         },
         (response: any) => {
-          console.log(response)
+          console.log(response.status)
         }
       )
     }
@@ -100,17 +106,17 @@ const Timeline = () => {
   const handleUpload = (values: any) => {
     setFileList(values.fileList)
   }
-  const fetchTimeline = () => {
-    //TODO fetch timeline
-    var payload = { userId: localStorage.USERID }
+  const fetchTimeline = (offset: number) => {
+    var payload = { userId: localStorage.USERID, limit: 50, offset: offset }
     timeline.fetchTimeline(
       payload,
       ({ data }: any) => {
-        setData(data)
+        setUsers(data.body.users)
+        setData(data.body.tweets)
         setLoading(false)
       },
       (response: any) => {
-        console.log(response)
+        console.log(response.status)
       }
     )
   }
@@ -121,7 +127,7 @@ const Timeline = () => {
     setVisible(false)
   }
   useEffect(() => {
-    fetchTimeline()
+    fetchTimeline(0)
   }, [])
   return (
     <Layout hasSider={false} style={{ minHeight: '100vh', background: '#f0f2f5' }}>
@@ -187,15 +193,17 @@ const Timeline = () => {
           itemLayout="horizontal"
           loading={loading}
           dataSource={data}
-          renderItem={(item: IPost) => (
+          renderItem={(item: IPost, index: number) => (
             <PostItem
-              id={item.id}
+              _id={item._id}
               owner={item.owner}
+              username={users[index].displayName}
               message={item.message}
               picture={item.picture}
-              video={item.video}
+              videos={item.videos}
               created={item.created}
               likes={item.likes}
+              islike={item.likes.indexOf(localStorage.USERID) >= 0}
             />
           )}
         />
