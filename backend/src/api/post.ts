@@ -33,6 +33,7 @@ export async function addTweet(req, res) {
       return
     }
   })
+  return res.send({ status: 200, body: { message: 'done' } })
 }
 
 export async function deleteTweet(req, res) {
@@ -55,6 +56,7 @@ export async function deleteTweet(req, res) {
     console.log(result.posts)
     await result.save()
   })
+  return res.send({ status: 200, body: { message: 'done' } })
 }
 
 export async function getTweet(req, res) {
@@ -104,6 +106,7 @@ export async function deleteComment(req, res) {
     console.log(result.comments)
     await result.save()
   })
+  return res.send({ status: 200, body: { message: 'done' } })
 }
 
 export async function likeTweet(req, res) {
@@ -114,6 +117,7 @@ export async function likeTweet(req, res) {
     result.likes.push(userId)
     result.save()
   })
+  return res.send({ status: 200, body: { message: 'done' } })
 }
 
 export async function unlikeTweet(req, res) {
@@ -129,6 +133,7 @@ export async function unlikeTweet(req, res) {
     console.log(result.likes)
     await result.save()
   })
+  return res.send({ status: 200, body: { message: 'done' } })
 }
 
 export async function getNewFeed(req, res) {
