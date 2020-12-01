@@ -19,4 +19,4 @@ const CommentSchema: Schema = new Schema({
 })
 
 export const Post = mongoose.model<IPost>('Post', PostSchema)
-export const Comment = mongoose.model<IComment>('UserFollow', CommentSchema)
+export const Comment = mongoose.model<IComment>('Comment', CommentSchema)

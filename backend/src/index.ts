@@ -1,8 +1,13 @@
+require('dotenv').config()
+
 import * as express from 'express'
 import { Request, Response } from 'express'
 import { IRequest } from './types/types'
-import { login, register } from './api/user'
-require('dotenv').config()
+import { login, register, follow, unfollow } from './api/user'
+import { addTweet, deleteTweet, getTweet, addComment, deleteComment, likeTweet, unlikeTweet } from './api/post'
+import { getFollowings, getNewFeed, getFollowers, getComments, search } from './api/getter'
+
+import { uploadMiddleware } from './api/upload'
 
 const app = express()
 const cors = require('cors')
@@ -46,6 +51,83 @@ app.post('/register', (req: IRequest<{ username: string; password: string; displ
     console.log(err)
     return
   })
+})
+
+app.post('/upload', uploadMiddleware, (req: Request & { files: any }, res: Response) => {
+  const uploadData = {
+    status: 200,
+    files: req.files,
+  }
+  res.json(uploadData)
+})
+
+app.post('/addTweet', (req, res) => {
+  addTweet(req, res)
+  return
+})
+
+app.post('/deleteTweet', (req, res) => {
+  deleteTweet(req, res)
+  return
+})
+
+app.post('/getTweet', (req, res) => {
+  getTweet(req, res)
+  return
+})
+
+app.post('/addComment', (req, res) => {
+  addComment(req, res)
+  return
+})
+
+app.post('/deleteComment', (req, res) => {
+  deleteComment(req, res)
+  return
+})
+
+app.post('/likeTweet', (req, res) => {
+  likeTweet(req, res)
+  return
+})
+
+app.post('/unlikeTweet', (req, res) => {
+  unlikeTweet(req, res)
+  return
+})
+
+app.post('/follow', (req, res) => {
+  follow(req, res)
+  return
+})
+
+app.post('/unfollow', (req, res) => {
+  unfollow(req, res)
+  return
+})
+
+app.post('/getFollowings', (req, res) => {
+  getFollowings(req, res)
+})
+
+app.post('/getNewFeed', (req, res) => {
+  getNewFeed(req, res)
+  return
+})
+
+app.post('/getFollowers', (req, res) => {
+  getFollowers(req, res)
+  return
+})
+
+app.post('/getComments', (req, res) => {
+  getComments(req, res)
+  return
+})
+
+app.post('/search', (req, res) => {
+  search(req, res)
+  return
 })
 
 app.listen(PORT, () => {
