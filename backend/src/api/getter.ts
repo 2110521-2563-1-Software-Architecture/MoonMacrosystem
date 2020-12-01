@@ -8,10 +8,12 @@ const mongoose = require('mongoose')
 export async function getFollowers(req, res) {
   const { userId } = req.body
   const user = await UserFollow.findOne({ username: userId })
+  console.log(user)
   const followers = new Set()
   const followersOb = new Set()
   let out = []
   if (user != null) {
+    console.log('xxxx')
     for (const c of user.followers) {
       followers.add(String(c))
     }
@@ -28,6 +30,7 @@ export async function getFollowers(req, res) {
 
 export async function getFollowings(userId) {
   const user = await UserFollow.findOne({ username: userId })
+  console.log(user)
   const followings = new Set()
   const followingsOb = new Set()
   let out = []

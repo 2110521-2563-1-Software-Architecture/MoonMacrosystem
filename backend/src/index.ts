@@ -112,7 +112,7 @@ app.post('/getNewFeed', (req, res) => {
   return
 })
 
-app.post('/getFollwers', (req, res) => {
+app.post('/getFollowers', (req, res) => {
   getFollowers(req, res)
   return
 })
