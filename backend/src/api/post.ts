@@ -125,7 +125,8 @@ export async function unlikeTweet(req, res) {
   //
   Post.findOne({ _id: tweetId }, async (err, result) => {
     console.log(result)
-    const index = result.comments.indexOf(userId)
+
+    const index = result.likes.indexOf(userId)
     console.log(index)
     if (index > -1) {
       result.likes.splice(index, 1)

@@ -85,6 +85,6 @@ export async function getComments(req, res) {
 
 export async function search(req, res) {
   const { username } = req.body
-  const result = User.find({ username: { $regex: username, $options: 'i' } })
+  const result = await User.find({ username: { $regex: username, $options: 'i' } })
   return res.send({ status: 200, body: { result } })
 }
