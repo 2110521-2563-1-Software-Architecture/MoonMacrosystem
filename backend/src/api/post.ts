@@ -38,15 +38,7 @@ export async function addTweet(req, res) {
 
 export async function deleteTweet(req, res) {
   const { userId, tweetId } = req.body
-  Post.deleteOne({ _id: tweetId }, function (err) {
-    if (!err) {
-      res.send({ status: 200, body: { message: 'found' } })
-      return
-    } else {
-      res.send({ status: 200, body: { message: 'Not found' } })
-      return
-    }
-  })
+  Post.deleteOne({ _id: tweetId })
 
   UserPosts.findOne({ username: userId }, async (err, result) => {
     const index = result.posts.indexOf(tweetId)

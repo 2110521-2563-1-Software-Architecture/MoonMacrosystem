@@ -33,10 +33,6 @@ export async function getFollowers(req, res) {
   }
 
   return res.send({ body: { followers: out, users: users } })
-
-  console.log(out)
-
-  return res.send({ status: 200, body: out })
 }
 
 export async function getFollowingsZero(userId) {
@@ -114,7 +110,7 @@ export async function getNewFeed(req, res) {
     users.push(user)
   }
 
-  return res.send({ status: 200, body: { tweets: result, users: users } })
+  return res.send({ body: { tweets: result, users: users } })
 }
 
 export async function getComments(req, res) {
@@ -136,7 +132,7 @@ export async function getComments(req, res) {
     const u = await User.findOne({ _id: v.owner })
     users.push(u)
   }
-  return res.send({ status: 200, body: { comments: comments, users: users } })
+  return res.send({ body: { comments: comments, users: users } })
 }
 
 export async function search(req, res) {
