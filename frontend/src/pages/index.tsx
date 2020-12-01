@@ -50,6 +50,7 @@ const Login = () => {
       ({ data }: any) => {
         if (data.status == '200') {
           localStorage.setItem('REMEMBER', values.remember)
+          localStorage.setItem('LOGINNAME', values.username)
           localStorage.setItem('USERNAME', data.body.username)
           localStorage.setItem('USERID', data.body.userId)
           localStorage.setItem('ACCESS_TOKEN', 'true')
@@ -87,7 +88,7 @@ const Login = () => {
           style={formStyle}
           initialValues={{
             remember: true,
-            username: localStorage.getItem('REMEMBER') ? localStorage.getItem('USERNAME') : null,
+            username: localStorage.getItem('REMEMBER') ? localStorage.getItem('LOGINNAME') : null,
           }}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}

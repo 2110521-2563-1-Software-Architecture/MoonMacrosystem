@@ -55,10 +55,12 @@ const MainHeader = () => {
     redirectTo(`/result?search=${values}`)
   }
   const showFollowing = () => {
+    setLoading1(true)
     fetchFollowing()
     setFollowingVisible(true)
   }
   const showFollower = () => {
+    setLoading2(true)
     fetchFollower()
     setFollowerVisible(true)
   }

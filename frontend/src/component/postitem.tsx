@@ -89,7 +89,7 @@ const PostItem = ({ _id, owner, username, message, picture, videos, created, lik
   const [visible, setVisible] = useState(false)
   const [isShow, setisShow] = useState(true)
 
-  const Photo = avatars[owner.length % avatars.length]
+  const Photo = avatars[username.length % avatars.length]
 
   const handleWriteStatus = () => {
     setVisible(true)
@@ -162,15 +162,8 @@ const PostItem = ({ _id, owner, username, message, picture, videos, created, lik
     timeline.addComment(
       payload,
       ({ data }: any) => {
-        console.log('data', data)
-        var tmp: IComment = {
-          _id: '000',
-          owner: localStorage.USERID,
-          message: data.body.message,
-          created: moment().toString(),
-        }
-        setComments(comments.concat(tmp))
         setVisible(false)
+        fetchcomment()
       },
       (response: any) => {
         console.log(response.status)

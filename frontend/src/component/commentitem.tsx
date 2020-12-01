@@ -27,7 +27,7 @@ const { Text } = Typography
 const CommentItem = ({ _id, owner, username, message, created, postid }: IComment) => {
   const [isShow, setisShow] = useState(true)
 
-  const Photo = avatars[owner.length % avatars.length]
+  const Photo = avatars[username.length % avatars.length]
   const handleDelete = () => {
     var payload = { userId: localStorage.USERID, tweetId: postid, commentId: _id }
     timeline.deleteComment(
@@ -52,7 +52,7 @@ const CommentItem = ({ _id, owner, username, message, created, postid }: ICommen
       />
       {owner == localStorage.USERID && (
         <span onClick={handleDelete}>
-          <img src={BinIcon} alt="bin" style={{ paddingTop: '1rem' }} />
+          <img src={BinIcon} alt="bin" style={{ paddingTop: '1rem', paddingRight: '1rem' }} />
         </span>
       )}
     </div>
