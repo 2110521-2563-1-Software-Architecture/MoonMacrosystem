@@ -11,7 +11,9 @@ export async function getFollowers(req, res) {
   console.log(user)
   const followers = new Set()
   const followersOb = new Set()
-  let out = []
+  let out
+  out = []
+
   if (user != null) {
     console.log('xxxx')
     for (const c of user.followers) {
