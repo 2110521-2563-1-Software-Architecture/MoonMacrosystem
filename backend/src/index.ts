@@ -102,8 +102,9 @@ app.post('/follow', (req, res) => {
 })
 
 app.post('/getFollowings', (req, res) => {
-  getFollowings(req, res)
-  return
+  const { userId } = req.body
+  const followings = getFollowings(userId)
+  return res.send({ status: 200, body: { followings } })
 })
 
 app.listen(PORT, () => {

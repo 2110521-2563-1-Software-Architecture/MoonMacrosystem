@@ -5,9 +5,7 @@ import { IRequest } from '../types/types'
 import { Response } from 'express'
 const mongoose = require('mongoose')
 
-export async function getFollowings(req, res) {
-  const { userId } = req.body
-
+export async function getFollowings(userId) {
   const user = await UserFollow.findOne({ username: userId })
   const followings = new Set()
   const followingsOb = new Set()
@@ -25,4 +23,9 @@ export async function getFollowings(req, res) {
   console.log(out)
 
   return out
+}
+
+export async function getNewFeed(req, res) {
+  const { userId } = req.body
+  const followings = getFollowings(userId)
 }
