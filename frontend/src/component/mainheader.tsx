@@ -15,8 +15,9 @@ import Avatar7 from '../assets/img/avatar-7.jpg'
 const avatars = [Avatar1, Avatar2, Avatar3, Avatar4, Avatar5, Avatar6, Avatar7]
 
 interface IFriend {
-  id: string
+  _id: string
   username: string
+  displayName: string
 }
 
 const { Text } = Typography
@@ -37,9 +38,12 @@ const headerStyle: CSSProperties = {
   paddingRight: '20%',
 }
 const MainHeader = () => {
-  const [loading, setLoading] = useState(true)
+  const [loading1, setLoading1] = useState(true)
+  const [loading2, setLoading2] = useState(true)
   const [following, setFollowing] = useState([])
   const [follower, setFollower] = useState([])
+  const [followingUsers, setFollowingUsers] = useState<IFriend[]>([])
+  const [followerUsers, setFollowerUsers] = useState<IFriend[]>([])
   const [followingVisible, setFollowingVisible] = useState(false)
   const [followerVisible, setFollowerVisible] = useState(false)
 
@@ -52,9 +56,11 @@ const MainHeader = () => {
     redirectTo(`/result?search=${values}`)
   }
   const showFollowing = () => {
+    fetchFollowing()
     setFollowingVisible(true)
   }
   const showFollower = () => {
+    fetchFollower()
     setFollowerVisible(true)
   }
   const handleClose = () => {
@@ -69,23 +75,43 @@ const MainHeader = () => {
     }
     return false
   }
-  const fetchFriends = () => {
-    //TODO fetch friend
+  const fetchFollowing = () => {
     var payload = { userId: localStorage.USERID }
-    friend.fetchFollow(
+    friend.getFollowings(
       payload,
       ({ data }: any) => {
-        setFollower(data.followers)
-        setFollowing(data.followings)
-        setLoading(false)
+        console.log('following', data)
+        if (data.body.followings.length !== undefined) {
+          setFollowing(data.body.followings)
+          setFollowingUsers(data.body.users)
+        }
+        setLoading1(false)
       },
       (response: any) => {
-        console.log(response)
+        console.log('response')
+      }
+    )
+  }
+  const fetchFollower = () => {
+    var payload = { userId: localStorage.USERID }
+
+    friend.getFollowers(
+      payload,
+      ({ data }: any) => {
+        console.log('followers', data)
+        setFollowingUsers(data.body.users)
+        setFollower(data.body.followers)
+        setFollowerUsers(data.body.users)
+        setLoading2(false)
+      },
+      (response: any) => {
+        console.log('response')
       }
     )
   }
   useEffect(() => {
-    fetchFriends()
+    fetchFollowing()
+    fetchFollower()
   }, [])
   return (
     <div style={headerStyle}>
@@ -146,9 +172,11 @@ const MainHeader = () => {
         >
           <List
             itemLayout="horizontal"
-            loading={loading}
+            loading={loading1}
             dataSource={following}
-            renderItem={(item: IFriend) => <UserListItem id={item.id} username={item.username} isfollow={true} />}
+            renderItem={(item, index: number) => (
+              <UserListItem id={item} username={followingUsers[index].displayName} isfollow={true} />
+            )}
           />
         </Modal>
         <Modal
@@ -163,10 +191,14 @@ const MainHeader = () => {
         >
           <List
             itemLayout="horizontal"
-            loading={loading}
+            loading={loading2}
             dataSource={follower}
-            renderItem={(item: IFriend) => (
-              <UserListItem id={item.id} username={item.username} isfollow={checkIsFollow(item.username)} />
+            renderItem={(item, index: number) => (
+              <UserListItem
+                id={item}
+                username={followerUsers[index].displayName}
+                isfollow={checkIsFollow(item.username)}
+              />
             )}
           />
         </Modal>
