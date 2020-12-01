@@ -82,3 +82,9 @@ export async function getComments(req, res) {
 
   return res.send({ status: 200, body: { comments: comments } })
 }
+
+export async function search(req, res) {
+  const { username } = req.body
+  const result = User.find({ username: { $regex: username, $options: 'i' } })
+  return res.send({ status: 200, body: { result } })
+}
