@@ -105,9 +105,9 @@ export async function deleteComment(req, res) {
 }
 
 export async function likeTweet(req, res) {
-  const { userId, postId } = req.body
+  const { userId, tweetId } = req.body
   //
-  Post.findOne({ _id: postId }, async (err, result) => {
+  Post.findOne({ _id: tweetId }, async (err, result) => {
     console.log(result)
     result.likes.push(userId)
     result.save()
@@ -115,9 +115,9 @@ export async function likeTweet(req, res) {
 }
 
 export async function unlikeTweet(req, res) {
-  const { userId, postId } = req.body
+  const { userId, tweetId } = req.body
   //
-  Post.findOne({ _id: postId }, async (err, result) => {
+  Post.findOne({ _id: tweetId }, async (err, result) => {
     console.log(result)
     const index = result.comments.indexOf(userId)
     console.log(index)
