@@ -10,7 +10,7 @@ export async function addTweet(req, res) {
   const likes = []
   const comments = []
 
-  const tweet = await new Post({ owner: userId, likes, comments, message, picture, video }).save()
+  const tweet = await new Post({ owner: userId, likes, comments, message, picture, videos: video }).save()
   console.log(tweet.owner)
 
   // return res.send({ status: 200, body: { message: 'ggg '});
