@@ -32,7 +32,7 @@ export async function getFollowers(req, res) {
     users.push(u)
   }
 
-  return res.send({ status: 200, body: { followers: out, users: users } })
+  return res.send({ body: { followers: out, users: users } })
 
   console.log(out)
 
@@ -89,7 +89,7 @@ export async function getFollowings(req, res) {
     users.push(u)
   }
 
-  return res.send({ status: 200, body: { followrings: out, users: users } })
+  return res.send({ body: { followings: out, users: users } })
 
   console.log(out)
 
@@ -142,5 +142,5 @@ export async function getComments(req, res) {
 export async function search(req, res) {
   const { username } = req.body
   const result = await User.find({ username: { $regex: username, $options: 'i' } })
-  return res.send({ status: 200, body: { result } })
+  return res.send({ body: { result } })
 }
