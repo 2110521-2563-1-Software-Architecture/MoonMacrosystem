@@ -67,11 +67,11 @@ export async function getTweet(req, res) {
 }
 
 export async function addComment(req, res) {
-  const { userId, message, postId } = req.body
+  const { userId, message, tweetId } = req.body
   //
   const comment = await new Comment({ userId, message }).save()
 
-  Post.findOne({ _id: postId }, async (err, result) => {
+  Post.findOne({ _id: tweetId }, async (err, result) => {
     console.log(result)
     result.comments.push(comment._id)
     result.save()
@@ -79,7 +79,7 @@ export async function addComment(req, res) {
   res.send({ status: 200, body: { message } })
 }
 export async function deleteComment(req, res) {
-  const { userId, commentId, postId } = req.body
+  const { userId, commentId, tweetId } = req.body
   //
 
   Comment.deleteOne({ _id: commentId }, function (err) {
@@ -92,7 +92,7 @@ export async function deleteComment(req, res) {
     }
   })
 
-  Post.findOne({ _id: postId }, async (err, result) => {
+  Post.findOne({ _id: tweetId }, async (err, result) => {
     console.log(result)
     const index = result.comments.indexOf(commentId)
     console.log(index)
