@@ -5,7 +5,7 @@ import { Request, Response } from 'express'
 import { IRequest } from './types/types'
 import { login, register, follow } from './api/user'
 import { addTweet, deleteTweet, getTweet, addComment, deleteComment, likeTweet } from './api/post'
-import { getFollowings, getNewFeed } from './api/getter'
+import { getFollowings, getNewFeed, getFollowers } from './api/getter'
 
 import { uploadMiddleware } from './api/upload'
 
@@ -109,6 +109,11 @@ app.post('/getFollowings', (req, res) => {
 
 app.post('/getNewFeed', (req, res) => {
   getNewFeed(req, res)
+  return
+})
+
+app.post('/getFollwers', (req, res) => {
+  getFollowers(req, res)
   return
 })
 

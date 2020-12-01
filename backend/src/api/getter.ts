@@ -5,6 +5,27 @@ import { IRequest } from '../types/types'
 import { Response } from 'express'
 const mongoose = require('mongoose')
 
+export async function getFollowers(req, res) {
+  const { userId } = req.body
+  const user = await UserFollow.findOne({ username: userId })
+  const followers = new Set()
+  const followersOb = new Set()
+  let out = []
+  if (user != null) {
+    for (const c of user.followers) {
+      followers.add(String(c))
+    }
+    for (const c of Array.from(followers)) {
+      followersOb.add(mongoose.Types.ObjectId(c))
+    }
+    out = Array.from(followersOb)
+  }
+
+  console.log(out)
+
+  return res.send({ status: 200, body: out })
+}
+
 export async function getFollowings(userId) {
   const user = await UserFollow.findOne({ username: userId })
   const followings = new Set()
@@ -33,5 +54,6 @@ export async function getNewFeed(req, res) {
   const result = await Post.find({ owner: { $in: followings } })
   console.log(result)
   console.log('yyyyy')
+
   return res.send({ status: 200 })
 }
