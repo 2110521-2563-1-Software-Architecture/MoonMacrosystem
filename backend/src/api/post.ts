@@ -69,7 +69,7 @@ export async function getTweet(req, res) {
 export async function addComment(req, res) {
   const { userId, message, tweetId } = req.body
   //
-  const comment = await new Comment({ userId, message }).save()
+  const comment = await new Comment({ owner: userId, message }).save()
 
   Post.findOne({ _id: tweetId }, async (err, result) => {
     console.log(result)
