@@ -9,7 +9,7 @@ export async function getFollowings(userId) {
   const user = await UserFollow.findOne({ username: userId })
   const followings = new Set()
   const followingsOb = new Set()
-  let out
+  let out = []
   if (user != null) {
     for (const c of user.followings) {
       followings.add(String(c))
@@ -27,5 +27,11 @@ export async function getFollowings(userId) {
 
 export async function getNewFeed(req, res) {
   const { userId } = req.body
-  const followings = getFollowings(userId)
+  const followings = await getFollowings(userId)
+
+  console.log('xxxxx')
+  const result = await Post.find({ owner: { $in: followings } })
+  console.log(result)
+  console.log('yyyyy')
+  return res.send({ status: 200 })
 }

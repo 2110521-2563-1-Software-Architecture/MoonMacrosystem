@@ -5,7 +5,7 @@ import { Request, Response } from 'express'
 import { IRequest } from './types/types'
 import { login, register, follow } from './api/user'
 import { addTweet, deleteTweet, getTweet, addComment, deleteComment, likeTweet } from './api/post'
-import { getFollowings } from './api/getter'
+import { getFollowings, getNewFeed } from './api/getter'
 
 import { uploadMiddleware } from './api/upload'
 
@@ -105,6 +105,11 @@ app.post('/getFollowings', (req, res) => {
   const { userId } = req.body
   const followings = getFollowings(userId)
   return res.send({ status: 200, body: { followings } })
+})
+
+app.post('/getNewFeed', (req, res) => {
+  getNewFeed(req, res)
+  return
 })
 
 app.listen(PORT, () => {
