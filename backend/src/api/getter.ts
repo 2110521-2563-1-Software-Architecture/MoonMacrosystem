@@ -69,7 +69,7 @@ export async function getFollowings(req, res) {
 
   if (user != null) {
     console.log('xxxx')
-    for (const c of user.followers) {
+    for (const c of user.followings) {
       followings.add(String(c))
     }
     for (const c of Array.from(followings)) {
