@@ -76,7 +76,7 @@ const Timeline = () => {
               fetchTimeline(0)
             },
             (response: any) => {
-              console.log(response)
+              console.log(response.status)
             }
           )
         },
@@ -94,8 +94,8 @@ const Timeline = () => {
       timeline.addPost(
         payload,
         ({ data }: any) => {
-          console.log(data)
           setVisible(false)
+          fetchTimeline(0)
         },
         (response: any) => {
           console.log(response.status)

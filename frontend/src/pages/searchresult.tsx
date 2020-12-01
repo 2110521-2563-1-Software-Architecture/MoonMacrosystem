@@ -25,7 +25,6 @@ const SearchResult = () => {
 
   const checkIsFollow = (val: string) => {
     for (var i = 0; i < following.length; i++) {
-      console.log(val)
       if (following[i] == val) {
         return true
       }
@@ -41,7 +40,7 @@ const SearchResult = () => {
         setHasFollowingData(true)
       },
       (response: any) => {
-        console.log(response)
+        console.log(response.status)
       }
     )
   }

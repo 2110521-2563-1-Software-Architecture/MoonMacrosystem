@@ -55,13 +55,11 @@ const Register = () => {
         }
       },
       (response: any) => {
-        console.log(response.data)
+        console.log(response.status)
       }
     )
   }
-  const onFinishFailed = (errorInfo: unknown) => {
-    console.log('Failed:', errorInfo)
-  }
+  const onFinishFailed = (errorInfo: unknown) => {}
 
   return (
     <Layout hasSider={false} style={{ background: '#f0f2f5' }}>

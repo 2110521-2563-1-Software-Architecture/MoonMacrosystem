@@ -105,11 +105,9 @@ const PostItem = ({ _id, owner, username, message, picture, videos, created, lik
       payload = { userId: localStorage.USERID, tweetId: _id }
       timeline.updateUnlike(
         payload,
-        ({ data }: any) => {
-          console.log('data', data)
-        },
+        ({ data }: any) => {},
         (response: any) => {
-          console.log('response')
+          console.log(response.status)
         }
       )
     } else {
@@ -119,11 +117,9 @@ const PostItem = ({ _id, owner, username, message, picture, videos, created, lik
       payload = { userId: localStorage.USERID, tweetId: _id }
       timeline.updateLike(
         payload,
-        ({ data }: any) => {
-          console.log('data')
-        },
+        ({ data }: any) => {},
         (response: any) => {
-          console.log('response')
+          console.log(response.status)
         }
       )
     }
@@ -177,7 +173,7 @@ const PostItem = ({ _id, owner, username, message, picture, videos, created, lik
         setVisible(false)
       },
       (response: any) => {
-        console.log('response.status')
+        console.log(response.status)
       }
     )
   }
@@ -193,17 +189,14 @@ const PostItem = ({ _id, owner, username, message, picture, videos, created, lik
     )
   }
   const handleDelete = () => {
-    //TODO delete post
     var payload = { userId: localStorage.USERID, tweetId: _id }
     timeline.deletePost(
       payload,
       ({ data }: any) => {
-        console.log('delete post', data)
         AntMessage.success('Delete your post success!')
         setisShow(false)
       },
       (response: any) => {
-        console.log(response)
         AntMessage.error('Cannot delete this post. Please try again.')
       }
     )

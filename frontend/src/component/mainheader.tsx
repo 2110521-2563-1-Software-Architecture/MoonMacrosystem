@@ -52,7 +52,6 @@ const MainHeader = () => {
     redirectTo('/')
   }
   const onSearch = (values: String) => {
-    console.log(values)
     redirectTo(`/result?search=${values}`)
   }
   const showFollowing = () => {
@@ -80,7 +79,6 @@ const MainHeader = () => {
     friend.getFollowings(
       payload,
       ({ data }: any) => {
-        console.log('following', data)
         if (data.body.followings.length !== undefined) {
           setFollowing(data.body.followings)
           setFollowingUsers(data.body.users)
@@ -88,7 +86,7 @@ const MainHeader = () => {
         setLoading1(false)
       },
       (response: any) => {
-        console.log('response')
+        console.log(response.status)
       }
     )
   }
@@ -98,14 +96,13 @@ const MainHeader = () => {
     friend.getFollowers(
       payload,
       ({ data }: any) => {
-        console.log('followers', data)
         setFollowingUsers(data.body.users)
         setFollower(data.body.followers)
         setFollowerUsers(data.body.users)
         setLoading2(false)
       },
       (response: any) => {
-        console.log('response')
+        console.log(response.status)
       }
     )
   }

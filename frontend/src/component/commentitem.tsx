@@ -37,7 +37,6 @@ const CommentItem = ({ _id, owner, username, message, created, postid }: ICommen
         setisShow(false)
       },
       (response: any) => {
-        console.log(response)
         AntMessage.error('Cannot delete this comment. Please try again.')
       }
     )

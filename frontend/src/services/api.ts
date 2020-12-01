@@ -37,7 +37,6 @@ export const timeline = {
     callback: any,
     onRejected: any
   ) => {
-    console.log('add post', payload)
     api
       .post('/addTweet', payload)
       .then(({ data }) => callback({ data }))
