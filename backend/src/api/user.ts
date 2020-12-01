@@ -102,14 +102,30 @@ export async function follow(req, res) {
 export async function unfollow(req, res) {
   const { userId, targetId } = req.body
   console.log('xxxxx')
+  const user = await UserFollow.findOne({ username: userId })
+  user.followings
+
   UserFollow.findOne({ username: userId }, async (err, result) => {
     console.log(result)
-    if (result == null) {
-      await new UserFollow({ username: userId, followers: [], followings: [targetId] }).save()
-      console.log('yyyyy')
-    } else {
-      result.followings.push(targetId)
-      result.save()
+    const index = result.followings.indexOf(targetId)
+    console.log(index)
+    if (index > -1) {
+      result.followings.splice(index, 1)
     }
+    console.log(result.followings)
+    await result.save()
   })
+
+  UserFollow.findOne({ username: targetId }, async (err, result) => {
+    console.log(result)
+    const index = result.followers.indexOf(userId)
+    console.log(index)
+    if (index > -1) {
+      result.followers.splice(index, 1)
+    }
+    console.log(result.followers)
+    await result.save()
+  })
+
+  res.send({ status: 200, body: { message: 'UnFollowwwwwwww' } })
 }

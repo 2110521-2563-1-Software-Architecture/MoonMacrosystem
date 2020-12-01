@@ -3,7 +3,7 @@ require('dotenv').config()
 import * as express from 'express'
 import { Request, Response } from 'express'
 import { IRequest } from './types/types'
-import { login, register, follow } from './api/user'
+import { login, register, follow, unfollow } from './api/user'
 import { addTweet, deleteTweet, getTweet, addComment, deleteComment, likeTweet, unlikeTweet } from './api/post'
 import { getFollowings, getNewFeed, getFollowers, getComments, search } from './api/getter'
 
@@ -98,6 +98,11 @@ app.post('/unlikeTweet', (req, res) => {
 
 app.post('/follow', (req, res) => {
   follow(req, res)
+  return
+})
+
+app.post('/unfollow', (req, res) => {
+  unfollow(req, res)
   return
 })
 
