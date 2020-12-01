@@ -78,7 +78,7 @@ export async function follow(req, res) {
   UserFollow.findOne({ username: userId }, async (err, result) => {
     console.log(result)
     if (result == null) {
-      await new UserFollow({ username: userId, followers: [], followings: [targetId] }).save()
+      await new UserFollow({ username: userId, followers: [userId], followings: [targetId] }).save()
       console.log('yyyyy')
     } else {
       result.followings.push(targetId)
@@ -88,7 +88,7 @@ export async function follow(req, res) {
 
   UserFollow.findOne({ username: targetId }, async (err, result) => {
     if (result == null) {
-      await new UserFollow({ username: targetId, followers: [userId], followings: [] }).save()
+      await new UserFollow({ username: targetId, followers: [userId], followings: [userId] }).save()
       console.log('zzzz')
     } else {
       result.followers.push(userId)
