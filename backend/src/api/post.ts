@@ -71,12 +71,14 @@ export async function addComment(req, res) {
   //
   const comment = await new Comment({ owner: userId, message }).save()
 
-  Post.findOne({ _id: tweetId }, async (err, result) => {
-    console.log(result)
-    result.comments.push(comment._id)
-    result.save()
-  })
-  res.send({ status: 200, body: { message } })
+  const id = (
+    await Post.findOne({ _id: tweetId }, async (err, result) => {
+      console.log(result)
+      result.comments.push(comment._id)
+      result.save()
+    })
+  )._id
+  res.send({ status: 200, body: { id } })
 }
 export async function deleteComment(req, res) {
   const { userId, commentId, tweetId } = req.body
