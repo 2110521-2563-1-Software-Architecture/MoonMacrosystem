@@ -8,11 +8,11 @@ export interface IRegister {
   displayName: string
 }
 export interface IPost {
-  id: string
+  _id: string
   owner: string
   message: string
-  picture: string
-  video: string
+  picture: string[]
+  videos: string[]
   likes: string[]
   // comments: string[]
   created: string
