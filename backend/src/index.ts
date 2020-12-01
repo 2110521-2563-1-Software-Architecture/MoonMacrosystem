@@ -102,9 +102,7 @@ app.post('/follow', (req, res) => {
 })
 
 app.post('/getFollowings', (req, res) => {
-  const { userId } = req.body
-  const followings = getFollowings(userId)
-  return res.send({ status: 200, body: { followings } })
+  getFollowings(req, res)
 })
 
 app.post('/getNewFeed', (req, res) => {

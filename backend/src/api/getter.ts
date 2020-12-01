@@ -24,13 +24,22 @@ export async function getFollowers(req, res) {
     }
     out = Array.from(followersOb)
   }
+  const users = []
+
+  for (const v of out) {
+    console.log(v)
+    const u = await User.findOne({ _id: v })
+    users.push(u)
+  }
+
+  return res.send({ status: 200, body: { followers: out, users: users } })
 
   console.log(out)
 
   return res.send({ status: 200, body: out })
 }
 
-export async function getFollowings(userId) {
+export async function getFollowingsZero(userId) {
   const user = await UserFollow.findOne({ username: userId })
   console.log(user)
   const followings = new Set()
@@ -53,9 +62,43 @@ export async function getFollowings(userId) {
   return out
 }
 
+export async function getFollowings(req, res) {
+  const { userId } = req.body
+  const user = await UserFollow.findOne({ username: userId })
+  console.log(user)
+  const followings = new Set()
+  const followingsOb = new Set()
+  let out
+  out = []
+
+  if (user != null) {
+    console.log('xxxx')
+    for (const c of user.followers) {
+      followings.add(String(c))
+    }
+    for (const c of Array.from(followings)) {
+      followingsOb.add(mongoose.Types.ObjectId(c))
+    }
+    out = Array.from(followingsOb)
+  }
+  const users = []
+
+  for (const v of out) {
+    console.log(v)
+    const u = await User.findOne({ _id: v })
+    users.push(u)
+  }
+
+  return res.send({ status: 200, body: { followrings: out, users: users } })
+
+  console.log(out)
+
+  return res.send({ status: 200, body: out })
+}
+
 export async function getNewFeed(req, res) {
   const { userId, limit, offset } = req.body
-  const followings = await getFollowings(userId)
+  const followings = await getFollowingsZero(userId)
 
   console.log('xxxxx')
   const result = await Post.find({ owner: { $in: followings } })
