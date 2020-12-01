@@ -70,12 +70,13 @@ export async function addComment(req, res) {
   const { userId, message, postId } = req.body
   //
   const comment = await new Comment({ userId, message }).save()
-  res.send({ status: 200, body: { message } })
+
   Post.findOne({ _id: postId }, async (err, result) => {
     console.log(result)
     result.comments.push(comment._id)
     result.save()
   })
+  res.send({ status: 200, body: { message } })
 }
 export async function deleteComment(req, res) {
   const { userId, commentId, postId } = req.body
