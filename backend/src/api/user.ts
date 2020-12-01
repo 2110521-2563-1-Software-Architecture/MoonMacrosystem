@@ -78,7 +78,7 @@ export async function follow(req, res) {
   UserFollow.findOne({ username: userId }, async (err, result) => {
     console.log(result)
     if (result == null) {
-      await new UserFollow({ username: userId, followers: [userId, targetId], followings: [userId, targetId] }).save()
+      await new UserFollow({ username: userId, followers: [userId], followings: [userId, targetId] }).save()
       console.log('yyyyy')
     } else {
       result.followings.push(targetId)
@@ -88,7 +88,7 @@ export async function follow(req, res) {
 
   UserFollow.findOne({ username: targetId }, async (err, result) => {
     if (result == null) {
-      await new UserFollow({ username: targetId, followers: [userId, targetId], followings: [userId, targetId] }).save()
+      await new UserFollow({ username: targetId, followers: [userId, targetId], followings: [targetId] }).save()
       console.log('zzzz')
     } else {
       result.followers.push(userId)
@@ -99,17 +99,17 @@ export async function follow(req, res) {
   return
 }
 
-// export async function unollow(req, res) {
-//   const { userId, targetId } = req.body
-//   console.log('xxxxx')
-//   UserFollow.findOne({ username: userId }, async (err, result) => {
-//     console.log(result)
-//     if (result == null) {
-//       await new UserFollow({ username: userId, followers: [], followings: [targetId] }).save()
-//       console.log('yyyyy')
-//     } else {
-//       result.followings.push(targetId)
-//       result.save()
-//     }
-//   })
-// }
+export async function unfollow(req, res) {
+  const { userId, targetId } = req.body
+  console.log('xxxxx')
+  UserFollow.findOne({ username: userId }, async (err, result) => {
+    console.log(result)
+    if (result == null) {
+      await new UserFollow({ username: userId, followers: [], followings: [targetId] }).save()
+      console.log('yyyyy')
+    } else {
+      result.followings.push(targetId)
+      result.save()
+    }
+  })
+}
