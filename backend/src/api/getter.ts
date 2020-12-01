@@ -35,7 +35,9 @@ export async function getFollowings(userId) {
   console.log(user)
   const followings = new Set()
   const followingsOb = new Set()
-  let out = []
+  let out
+  out = []
+
   if (user != null) {
     for (const c of user.followings) {
       followings.add(String(c))
