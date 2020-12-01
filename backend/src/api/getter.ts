@@ -65,8 +65,9 @@ export async function getNewFeed(req, res) {
   console.log('yyyyy')
   const users = []
   for (const v of result) {
-    const user = (await User.findOne({ _id: v._id })).username
-    users.push(users)
+    console.log(v)
+    const user = await User.findOne({ _id: v.owner })
+    users.push(user)
   }
 
   return res.send({ status: 200, body: { tweets: result, users: users } })
