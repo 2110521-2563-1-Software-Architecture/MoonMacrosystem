@@ -47,11 +47,13 @@ export async function getFollowings(userId) {
 }
 
 export async function getNewFeed(req, res) {
-  const { userId } = req.body
+  const { userId, limit, offset } = req.body
   const followings = await getFollowings(userId)
 
   console.log('xxxxx')
   const result = await Post.find({ owner: { $in: followings } })
+    .skip(offset)
+    .limit(limit)
   console.log(result)
   console.log('yyyyy')
 
