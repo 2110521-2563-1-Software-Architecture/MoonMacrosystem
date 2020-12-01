@@ -57,5 +57,11 @@ export async function getNewFeed(req, res) {
   console.log(result)
   console.log('yyyyy')
 
-  return res.send({ status: 200 })
+  return res.send({ status: 200, body: { tweets: result } })
 }
+
+// export async function getComments(req,res){
+//     const {tweetId} = req.body
+//     const commentsId = await (Post.findOne({ _id: tweetId}))
+//     commentsId.
+// }
