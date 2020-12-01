@@ -102,6 +102,7 @@ export async function getNewFeed(req, res) {
 
   console.log('xxxxx')
   const result = await Post.find({ owner: { $in: followings } })
+    .sort({ created: -1 })
     .skip(offset)
     .limit(limit)
   console.log(result)
