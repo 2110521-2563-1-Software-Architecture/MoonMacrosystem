@@ -1,3 +1,4 @@
+
 /* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
@@ -57,7 +58,7 @@ module.exports = {
         use: ['style-loader', 'css-loader'],
       },
       {
-        test: /\.(png|jpe?g|gif|svg)$/i,
+        test: /\.(png|jpe?g|gif|svg|mp4)$/i,
         use: [
           {
             loader: 'file-loader',
@@ -76,3 +77,4 @@ module.exports = {
     }),
   ],
 }
+

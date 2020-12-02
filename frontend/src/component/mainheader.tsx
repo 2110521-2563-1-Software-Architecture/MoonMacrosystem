@@ -15,8 +15,9 @@ import Avatar7 from '../assets/img/avatar-7.jpg'
 const avatars = [Avatar1, Avatar2, Avatar3, Avatar4, Avatar5, Avatar6, Avatar7]
 
 interface IFriend {
-  id: string
+  _id: string
   username: string
+  displayName: string
 }
 
 const { Text } = Typography
@@ -37,9 +38,12 @@ const headerStyle: CSSProperties = {
   paddingRight: '20%',
 }
 const MainHeader = () => {
-  const [loading, setLoading] = useState(true)
+  const [loading1, setLoading1] = useState(true)
+  const [loading2, setLoading2] = useState(true)
   const [following, setFollowing] = useState([])
   const [follower, setFollower] = useState([])
+  const [followingUsers, setFollowingUsers] = useState<IFriend[]>([])
+  const [followerUsers, setFollowerUsers] = useState<IFriend[]>([])
   const [followingVisible, setFollowingVisible] = useState(false)
   const [followerVisible, setFollowerVisible] = useState(false)
 
@@ -48,15 +52,44 @@ const MainHeader = () => {
     redirectTo('/')
   }
   const onSearch = (values: String) => {
-    console.log(values)
-    //TODO redirect to searchresult page with searchstr
     redirectTo(`/result?search=${values}`)
   }
   const showFollowing = () => {
-    setFollowingVisible(true)
+    setLoading1(true)
+    var payload = { userId: localStorage.USERID }
+    friend.getFollowings(
+      payload,
+      ({ data }: any) => {
+        if (data.body.followings.length !== undefined) {
+          setFollowing(data.body.followings)
+          setFollowingUsers(data.body.users)
+        }
+        setLoading1(false)
+        setFollowingVisible(true)
+      },
+      (response: any) => {
+        console.log(response.status)
+      }
+    )
   }
   const showFollower = () => {
-    setFollowerVisible(true)
+    fetchFollowing()
+    setLoading2(true)
+    var payload = { userId: localStorage.USERID }
+
+    friend.getFollowers(
+      payload,
+      ({ data }: any) => {
+        setFollowingUsers(data.body.users)
+        setFollower(data.body.followers)
+        setFollowerUsers(data.body.users)
+        setLoading2(false)
+        setFollowerVisible(true)
+      },
+      (response: any) => {
+        console.log(response.status)
+      }
+    )
   }
   const handleClose = () => {
     setFollowingVisible(false)
@@ -64,29 +97,47 @@ const MainHeader = () => {
   }
   const checkIsFollow = (val: string) => {
     for (var i = 0; i < following.length; i++) {
-      if (following[i].username == val) {
+      if (following[i] == val) {
         return true
       }
     }
     return false
   }
-  const fetchFriends = () => {
-    //TODO fetch friend
-    var payload = { username: localStorage.USERNAME }
-    friend.fetchFollow(
+  const fetchFollowing = () => {
+    var payload = { userId: localStorage.USERID }
+    friend.getFollowings(
       payload,
       ({ data }: any) => {
-        setFollower(data.followers)
-        setFollowing(data.followings)
-        setLoading(false)
+        if (data.body.followings.length !== undefined) {
+          setFollowing(data.body.followings)
+          setFollowingUsers(data.body.users)
+        }
+        setLoading1(false)
       },
       (response: any) => {
-        console.log(response)
+        console.log(response.status)
+      }
+    )
+  }
+  const fetchFollower = () => {
+    var payload = { userId: localStorage.USERID }
+
+    friend.getFollowers(
+      payload,
+      ({ data }: any) => {
+        setFollowingUsers(data.body.users)
+        setFollower(data.body.followers)
+        setFollowerUsers(data.body.users)
+        setLoading2(false)
+      },
+      (response: any) => {
+        console.log(response.status)
       }
     )
   }
   useEffect(() => {
-    fetchFriends()
+    fetchFollowing()
+    fetchFollower()
   }, [])
   return (
     <div style={headerStyle}>
@@ -112,12 +163,12 @@ const MainHeader = () => {
             <Menu style={{ width: 150, marginTop: '0.5rem' }}>
               <Menu.Item>
                 <a onClick={showFollowing}>
-                  <span style={{ color: '#A55FC1' }}>{following.length}</span> Following
+                  <span style={{ color: '#A55FC1' }}>{following.length - 1}</span> Following
                 </a>
               </Menu.Item>
               <Menu.Item>
                 <a onClick={showFollower}>
-                  <span style={{ color: '#A55FC1' }}>{follower.length}</span> Followers
+                  <span style={{ color: '#A55FC1' }}>{follower.length - 1}</span> Followers
                 </a>
               </Menu.Item>
               <Menu.Item>
@@ -138,7 +189,7 @@ const MainHeader = () => {
         <Modal
           title={
             <span style={{ fontWeight: 'bold' }}>
-              Following <span style={{ color: '#A55FC1' }}>{following.length}</span>
+              Following <span style={{ color: '#A55FC1' }}>{following.length - 1}</span>
             </span>
           }
           visible={followingVisible}
@@ -147,15 +198,17 @@ const MainHeader = () => {
         >
           <List
             itemLayout="horizontal"
-            loading={loading}
+            loading={loading1}
             dataSource={following}
-            renderItem={(item: IFriend) => <UserListItem id={item.id} username={item.username} isfollow={true} />}
+            renderItem={(item, index: number) => (
+              <UserListItem id={item} username={followingUsers[index].displayName} isfollow={true} />
+            )}
           />
         </Modal>
         <Modal
           title={
             <span style={{ fontWeight: 'bold' }}>
-              Followers <span style={{ color: '#A55FC1' }}>{follower.length}</span>
+              Followers <span style={{ color: '#A55FC1' }}>{follower.length - 1}</span>
             </span>
           }
           visible={followerVisible}
@@ -164,10 +217,10 @@ const MainHeader = () => {
         >
           <List
             itemLayout="horizontal"
-            loading={loading}
+            loading={loading2}
             dataSource={follower}
-            renderItem={(item: IFriend) => (
-              <UserListItem id={item.id} username={item.username} isfollow={checkIsFollow(item.username)} />
+            renderItem={(item, index: number) => (
+              <UserListItem id={item} username={followerUsers[index].displayName} isfollow={checkIsFollow(item)} />
             )}
           />
         </Modal>

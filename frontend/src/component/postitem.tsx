@@ -28,10 +28,28 @@ import Avatar6 from '../assets/img/avatar-6.jpg'
 import Avatar7 from '../assets/img/avatar-7.jpg'
 import { friend, timeline } from '../services/api'
 
+interface IPostItem {
+  _id: string
+  owner: string
+  username: string
+  message: string
+  picture: string[]
+  videos: string[]
+  likes: string[]
+  created: string
+  islike: boolean
+}
 interface IComment {
   owner: string
   message: string
   created: string
+  _id: string
+}
+
+interface IUserShow {
+  _id: string
+  username: string
+  displayName: string
 }
 
 const avatars = [Avatar1, Avatar2, Avatar3, Avatar4, Avatar5, Avatar6, Avatar7]
@@ -60,17 +78,18 @@ const inputStyle: CSSProperties = {
   marginRight: '1em',
 }
 
-const PostItem = ({ id, owner, message, picture, created, likes }: IPost) => {
+const PostItem = ({ _id, owner, username, message, picture, videos, created, likes, islike }: IPostItem) => {
   const [likeN, setLikeN] = useState(likes.length)
-  //TODO set isLike==true when user in likes list
-  const [isLike, setIsLike] = useState(false)
+  const [isLike, setIsLike] = useState(islike)
   const [comments, setComments] = useState<IComment[]>([])
   const [hasComment, setHasComment] = useState(false)
   const [mycomment, setMycomment] = useState('')
+  const [users, setUsers] = useState<IUserShow[]>([])
   const [loading, setLoading] = useState(true)
   const [visible, setVisible] = useState(false)
+  const [isShow, setisShow] = useState(true)
 
-  const Photo = avatars[owner.length % avatars.length]
+  const Photo = avatars[username.length % avatars.length]
 
   const handleWriteStatus = () => {
     setVisible(true)
@@ -83,19 +102,27 @@ const PostItem = ({ id, owner, message, picture, created, likes }: IPost) => {
     if (isLike) {
       setLikeN(likeN - 1)
       setIsLike(false)
-      payload = { owner: localStorage.USERNAME, postid: id, isLike: false }
+      payload = { userId: localStorage.USERID, tweetId: _id }
+      timeline.updateUnlike(
+        payload,
+        ({ data }: any) => {},
+        (response: any) => {
+          console.log(response.status)
+        }
+      )
     } else {
       setLikeN(likeN + 1)
       setIsLike(true)
 
-      payload = { owner: localStorage.USERNAME, postid: id, isLike: true }
+      payload = { userId: localStorage.USERID, tweetId: _id }
+      timeline.updateLike(
+        payload,
+        ({ data }: any) => {},
+        (response: any) => {
+          console.log(response.status)
+        }
+      )
     }
-    // TODO Update like of post
-    timeline.updateLike(
-      payload,
-      ({ data }: any) => {},
-      (response: any) => {}
-    )
   }
   const reply = () => {
     hasComment ? setHasComment(false) : setHasComment(true)
@@ -112,56 +139,57 @@ const PostItem = ({ id, owner, message, picture, created, likes }: IPost) => {
   ]
 
   const fetchcomment = () => {
-    //TODO fetch comment of post
-    var payload = { postid: id }
+    var payload = { tweetId: _id }
     timeline.fetchComment(
       payload,
       ({ data }: any) => {
-        setComments(data)
+        setUsers(data.body.users)
+        setComments(data.body.comments)
         setLoading(false)
       },
       (response: any) => {
-        console.log(response)
+        console.log(response.status)
       }
     )
   }
   const handleAddComment = () => {
     //TODO add comment + show new comment
     var payload = {
-      owner: localStorage.USERNAME,
+      userId: localStorage.USERID,
+      tweetId: _id,
       message: mycomment,
     }
     timeline.addComment(
       payload,
       ({ data }: any) => {
         setVisible(false)
+        fetchcomment()
       },
       (response: any) => {
-        console.log(response)
+        console.log(response.status)
       }
     )
   }
   const handleUnfollow = () => {
     //TODO unfollow
-    var payload = { owner: localStorage.USERNAME, username: owner }
+    var payload = { userId: localStorage.USERID, targetId: owner }
     friend.updateUnfollow(
       payload,
       ({ data }: any) => {
-        console.log(data)
+        console.log('data', data)
       },
       (response: any) => {}
     )
   }
   const handleDelete = () => {
-    //TODO delete
-    var payload = { owner: localStorage.USERNAME, postid: id }
+    var payload = { userId: localStorage.USERID, tweetId: _id }
     timeline.deletePost(
       payload,
       ({ data }: any) => {
         AntMessage.success('Delete your post success!')
+        setisShow(false)
       },
       (response: any) => {
-        console.log(response)
         AntMessage.error('Cannot delete this post. Please try again.')
       }
     )
@@ -169,14 +197,15 @@ const PostItem = ({ id, owner, message, picture, created, likes }: IPost) => {
   useEffect(() => {
     fetchcomment()
   }, [])
-  return (
+  return isShow ? (
     <div style={postStyle}>
       <Comment
+        style={{ width: '100%' }}
         actions={actions}
         author={
           <Dropdown
             overlay={
-              <Menu>
+              <Menu style={{ textAlign: 'center' }}>
                 <Menu.Item>
                   <a onClick={handleUnfollow}>Unfollow</a>
                 </Menu.Item>
@@ -185,7 +214,7 @@ const PostItem = ({ id, owner, message, picture, created, likes }: IPost) => {
             placement="topCenter"
             arrow={true}
           >
-            <Text style={{ fontSize: '0.9rem', fontWeight: 'bold' }}>{owner}</Text>
+            <Text style={{ fontSize: '0.9rem', fontWeight: 'bold' }}>{username}</Text>
           </Dropdown>
         }
         avatar={<Avatar icon={<img src={Photo} />} />}
@@ -194,17 +223,18 @@ const PostItem = ({ id, owner, message, picture, created, likes }: IPost) => {
             <div>
               <Text style={{ fontSize: '0.9rem' }}>{message}</Text>
             </div>
-            {picture.length != 0 ? (
-              <div style={{ textAlign: 'center', paddingTop: '1rem' }}>
-                <List
-                  dataSource={picture}
-                  grid={{ gutter: 16 }}
-                  renderItem={(item: string) => (
-                    <List.Item>
-                      <Image src={item} style={{ maxWidth: '8rem', maxHeight: '8rem' }} />
-                    </List.Item>
-                  )}
-                />
+            {picture.length > 0 && picture[0].length > 0 ? (
+              <div style={{ paddingTop: '1rem' }}>
+                <Image src={picture[0]} alt="image" style={{ maxWidth: '10rem', maxHeight: '10rem' }} />
+              </div>
+            ) : (
+              <></>
+            )}
+            {videos.length > 0 && videos[0].length > 0 ? (
+              <div>
+                <video width="320" height="200" controls>
+                  <source src={videos[0]} type="video/mp4" />
+                </video>
               </div>
             ) : (
               <></>
@@ -221,8 +251,15 @@ const PostItem = ({ id, owner, message, picture, created, likes }: IPost) => {
                   size="small"
                   loading={loading}
                   dataSource={comments}
-                  renderItem={(item: IPost) => (
-                    <CommentItem owner={item.owner} message={item.message} created={item.created} />
+                  renderItem={(item: IComment, index: number) => (
+                    <CommentItem
+                      _id={item._id}
+                      owner={item.owner}
+                      username={users[index].displayName}
+                      message={item.message}
+                      created={item.created}
+                      postid={_id}
+                    />
                   )}
                 />
               )}
@@ -270,12 +307,14 @@ const PostItem = ({ id, owner, message, picture, created, likes }: IPost) => {
           )
         }
       />
-      {owner == localStorage.USERNAME && (
+      {owner == localStorage.USERID && (
         <span onClick={handleDelete}>
           <img src={BinIcon} alt="bin" style={{ paddingTop: '1rem' }} />
         </span>
       )}
     </div>
+  ) : (
+    <></>
   )
 }
 export default PostItem
