@@ -62,7 +62,10 @@ export async function login(req: IRequest<{ username: string; password: string }
       if (valid) {
         const user = User.findOne({ username: username })
 
-        res.send({ status: 200, body: { message: 'Login Successful!', username: username, userId: (await user)._id } })
+        res.send({
+          status: 200,
+          body: { message: 'Login Successful!', username: (await user).displayName, userId: (await user)._id },
+        })
         return
       } else {
         res.send({ status: 400, body: { message: 'Login Failed! Password is invalid', username: username } })
