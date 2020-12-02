@@ -152,7 +152,7 @@ const MainHeader = () => {
 
       <div style={{ display: 'inline-block' }}>
         <Search
-          placeholder="Find your friends"
+          placeholder="Find your friends!"
           onSearch={onSearch}
           style={{ width: 300, height: 32, marginLeft: 10 }}
         />
