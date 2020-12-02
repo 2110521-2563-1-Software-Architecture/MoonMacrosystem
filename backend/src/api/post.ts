@@ -38,7 +38,7 @@ export async function addTweet(req, res) {
 
 export async function deleteTweet(req, res) {
   const { userId, tweetId } = req.body
-  Post.deleteOne({ _id: tweetId })
+  await Post.deleteOne({ _id: tweetId })
 
   UserPosts.findOne({ username: userId }, async (err, result) => {
     const index = result.posts.indexOf(tweetId)
@@ -78,7 +78,7 @@ export async function deleteComment(req, res) {
   const { userId, commentId, tweetId } = req.body
   //
 
-  Comment.deleteOne({ _id: commentId })
+  await Comment.deleteOne({ _id: commentId })
 
   Post.findOne({ _id: tweetId }, async (err, result) => {
     console.log(result)
