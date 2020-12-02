@@ -23,51 +23,53 @@ const UserListItem = ({ id, username, isfollow }: IFriendItem) => {
   const handleOnClick = (e: any) => {
     if (isFollow) {
       setIsFollow(false)
-      //TODO unfollow by id
-      var payload = { userId: localStorage.USERID, targetId: id }
-      friend.updateUnfollow(
-        payload,
-        ({ data }: any) => {
-          console.log(data)
-        },
-        (response: any) => {}
-      )
+      if (localStorage.USERID !== id) {
+        var payload = { userId: localStorage.USERID, targetId: id }
+        friend.updateUnfollow(
+          payload,
+          ({ data }: any) => {},
+          (response: any) => {}
+        )
+      }
     } else {
       setIsFollow(true)
-      //TODO follow by id
-      var payload = { userId: localStorage.USERID, targetId: id }
-      friend.updateFollow(
-        payload,
-        ({ data }: any) => {
-          console.log(data)
-        },
-        (response: any) => {}
-      )
+      if (localStorage.USERID !== id) {
+        var payload = { userId: localStorage.USERID, targetId: id }
+        friend.updateFollow(
+          payload,
+          ({ data }: any) => {},
+          (response: any) => {}
+        )
+      }
     }
   }
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: '0.5rem',
-      }}
-    >
-      <div>
-        <Avatar icon={<img src={Photo} />} />
-        <Text style={{ fontSize: '0.9rem', fontWeight: 'bold', paddingLeft: '1rem' }}>{username}</Text>
-      </div>
-      {isFollow ? (
-        <Button type="default" onClick={handleOnClick}>
-          Unfollow
-        </Button>
-      ) : (
-        <Button type="primary" onClick={handleOnClick}>
-          Follow
-        </Button>
+    <>
+      {localStorage.USERID !== id && (
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '0.5rem',
+          }}
+        >
+          <div>
+            <Avatar icon={<img src={Photo} />} />
+            <Text style={{ fontSize: '0.9rem', fontWeight: 'bold', paddingLeft: '1rem' }}>{username}</Text>
+          </div>
+          {isFollow ? (
+            <Button type="default" onClick={handleOnClick}>
+              Unfollow
+            </Button>
+          ) : (
+            <Button type="primary" onClick={handleOnClick}>
+              Follow
+            </Button>
+          )}
+        </div>
       )}
-    </div>
+    </>
   )
 }
 export default UserListItem

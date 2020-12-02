@@ -56,13 +56,40 @@ const MainHeader = () => {
   }
   const showFollowing = () => {
     setLoading1(true)
-    fetchFollowing()
-    setFollowingVisible(true)
+    var payload = { userId: localStorage.USERID }
+    friend.getFollowings(
+      payload,
+      ({ data }: any) => {
+        if (data.body.followings.length !== undefined) {
+          setFollowing(data.body.followings)
+          setFollowingUsers(data.body.users)
+        }
+        setLoading1(false)
+        setFollowingVisible(true)
+      },
+      (response: any) => {
+        console.log(response.status)
+      }
+    )
   }
   const showFollower = () => {
+    fetchFollowing()
     setLoading2(true)
-    fetchFollower()
-    setFollowerVisible(true)
+    var payload = { userId: localStorage.USERID }
+
+    friend.getFollowers(
+      payload,
+      ({ data }: any) => {
+        setFollowingUsers(data.body.users)
+        setFollower(data.body.followers)
+        setFollowerUsers(data.body.users)
+        setLoading2(false)
+        setFollowerVisible(true)
+      },
+      (response: any) => {
+        console.log(response.status)
+      }
+    )
   }
   const handleClose = () => {
     setFollowingVisible(false)
@@ -70,7 +97,7 @@ const MainHeader = () => {
   }
   const checkIsFollow = (val: string) => {
     for (var i = 0; i < following.length; i++) {
-      if (following[i].username == val) {
+      if (following[i] == val) {
         return true
       }
     }
@@ -136,12 +163,12 @@ const MainHeader = () => {
             <Menu style={{ width: 150, marginTop: '0.5rem' }}>
               <Menu.Item>
                 <a onClick={showFollowing}>
-                  <span style={{ color: '#A55FC1' }}>{following.length}</span> Following
+                  <span style={{ color: '#A55FC1' }}>{following.length - 1}</span> Following
                 </a>
               </Menu.Item>
               <Menu.Item>
                 <a onClick={showFollower}>
-                  <span style={{ color: '#A55FC1' }}>{follower.length}</span> Followers
+                  <span style={{ color: '#A55FC1' }}>{follower.length - 1}</span> Followers
                 </a>
               </Menu.Item>
               <Menu.Item>
@@ -162,7 +189,7 @@ const MainHeader = () => {
         <Modal
           title={
             <span style={{ fontWeight: 'bold' }}>
-              Following <span style={{ color: '#A55FC1' }}>{following.length}</span>
+              Following <span style={{ color: '#A55FC1' }}>{following.length - 1}</span>
             </span>
           }
           visible={followingVisible}
@@ -181,7 +208,7 @@ const MainHeader = () => {
         <Modal
           title={
             <span style={{ fontWeight: 'bold' }}>
-              Followers <span style={{ color: '#A55FC1' }}>{follower.length}</span>
+              Followers <span style={{ color: '#A55FC1' }}>{follower.length - 1}</span>
             </span>
           }
           visible={followerVisible}
@@ -193,11 +220,7 @@ const MainHeader = () => {
             loading={loading2}
             dataSource={follower}
             renderItem={(item, index: number) => (
-              <UserListItem
-                id={item}
-                username={followerUsers[index].displayName}
-                isfollow={checkIsFollow(item.username)}
-              />
+              <UserListItem id={item} username={followerUsers[index].displayName} isfollow={checkIsFollow(item)} />
             )}
           />
         </Modal>
